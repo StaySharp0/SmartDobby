@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset=utf-8 />
+	<title>design guide</title>
+  <!-- Compiled and minified CSS -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.4/css/materialize.min.css">
+   <!-- Compiled and minified JavaScript -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.4/js/materialize.min.js"></script>
+   <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+</head>
+<style>
+nav {
+    color: #fff;
+    background-color: #ee6e73;
+    width: 100%;
+    height: 56px;
+    line-height: 56px;
+}
+nav.top-nav {
+    height: 112px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-bottom: 1px solid rgba(0,0,0,0.14);
+    background-color: transparent;
+}
+nav.top-nav h2.header {
+    margin: 0;
+    padding-top: 26px;
+}
+.header {
+    color: #ee6e73;
+    font-weight: 300;
+}
+.top-nav.left-btn {
+  position: absolute;
+  top: 44px;
+  color: #ee6e73
+}
+.top-nav.right-btn {
+  position: absolute;
+  right:24px;
+  top: 44px;
+  color: #ee6e73
+}
+.card .card-content {
+  padding-top: 10px
+}
+.card .card-content .card-title {
+  font-size: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0,0,0,0.14);
+}
+.card .card-btn {
+  position: absolute;
+  right: 15px;
+  color: #333
+}
+
+.data-value {
+  position: relative;
+  float: left;
+  width: 30%; height: 0;
+  padding-bottom: 30%;
+}
+.data-value .value {
+  position: absolute;
+  text-align: center;
+  font-size: 24px;
+  color: #ffab40;
+  top: calc(50% - 18px);
+  left: calc(50% - 44px);
+}
+
+.data-value .btn-floating {
+  width: 80px; height: 80px;
+  position: absolute;
+  top: calc(50% - 40px);
+  left: calc(50% - 40px);
+}
+.data-value .btn-floating i {
+  font-size: 36px; line-height: 80px;
+}
+.data-script {
+  position: relative;
+  float: left;
+  width: 65%;
+  margin-left: 5%;
+  text-align: center;
+}
+</style>
+<body>
+  <header>
+      <nav class="top-nav">
+        <div class="container">
+          <div class="nav-wrapper">
+            <h2 class="header center">Title</h2>
+          </div>
+        </div>
+      </nav>
+      <div class="container">
+        <a href="#" data-target="nav-mobile" class="top-nav left-btn sidenav-trigger full hide-on-large-only"><i class="material-icons">menu</i></a>
+        <a href="#" data-target="nav-mobile" class="top-nav right-btn sidenav-trigger full hide-on-large-only"><i class="material-icons">edit</i></a>
+      </div>
+    </header>
+    <main>
+      <div class="row">
+        <div class="col s12 m6">
+          <div class="card">
+            <div class="card-content">
+              <div class="card-title">Item - type <a class="card-btn"><i class="material-icons">autorenew</i></a></div>
+              <div class="row" style="margin:0">
+                <div class="data-value">
+                  <div class="value">VALUSE</div>
+                </div>
+                <div class="data-script"><br>
+                  <div>sensor name</div><br>
+                  <div>history</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col s12 m6">
+          <div class="card">
+            <div class="card-content">
+              <div class="card-title">Item - type <a class="card-btn"><i class="material-icons">autorenew</i></a></div>
+              <div class="row" style="margin:0">
+                <div class="data-value">
+                  <a class="btn-floating waves-effect waves-light red"><i class="material-icons">settings_remote</i></a>
+                </div>
+                <div class="data-script"><br>
+                  <div>button name</div><br>
+                  <div>history</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col s12 m6">
+          <div class="card">
+            <div class="card-content">
+              <div class="card-title">Item - type <a class="card-btn"><i class="material-icons">autorenew</i></a></div>
+              <div class="row" style="margin:0">
+                <canvas id="myChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+
+<script>
+var ctx = document.getElementById("myChart").getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+        datasets: [{
+            label: 'Sensor Name',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+</script>
+</body>
+</html>

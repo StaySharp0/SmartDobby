@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset=utf-8 />
+	<title>design guide</title>
+  <!-- Compiled and minified CSS -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.4/css/materialize.min.css">
+   <!-- Compiled and minified JavaScript -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.4/js/materialize.min.js"></script>
+   <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+</head>
+<style>
+nav {
+    color: #fff;
+    background-color: #ee6e73;
+    width: 100%;
+    height: 56px;
+    line-height: 56px;
+}
+nav.top-nav {
+    height: 112px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-bottom: 1px solid rgba(0,0,0,0.14);
+    background-color: transparent;
+}
+nav.top-nav h2.header {
+    margin: 0;
+    padding-top: 26px;
+}
+.header {
+    color: #ee6e73;
+    font-weight: 300;
+}
+.top-nav.left-btn {
+  position: absolute;
+  top: 44px;
+  color: #ee6e73
+}
+.top-nav.right-btn {
+  position: absolute;
+  right:24px;
+  top: 44px;
+  color: #ee6e73
+}
+.card .card-content {
+  padding-top: 10px
+}
+.card .card-content .card-title {
+  font-size: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0,0,0,0.14);
+}
+.card .card-btn {
+  position: absolute;
+  right: 15px;
+  color: #333
+}
+
+.data-value {
+  position: relative;
+  float: left;
+  width: 30%; height: 0;
+  padding-bottom: 30%;
+}
+.data-value .value {
+  position: absolute;
+  text-align: center;
+  font-size: 24px;
+  color: #ffab40;
+  top: calc(50% - 18px);
+  left: calc(50% - 44px);
+}
+
+.data-value .btn-floating {
+  width: 80px; height: 80px;
+  position: absolute;
+  top: calc(50% - 40px);
+  left: calc(50% - 40px);
+}
+.data-value .btn-floating i {
+  font-size: 36px; line-height: 80px;
+}
+.data-script {
+  position: relative;
+  float: left;
+  width: 65%;
+  margin-left: 5%;
+  text-align: center;
+}
+</style>
+<body>
+  <header>
+      <nav class="top-nav">
+        <div class="container">
+          <div class="nav-wrapper">
+            <h2 class="header center">Title</h2>
+          </div>
+        </div>
+      </nav>
+      <div class="container">
+        <a href="#" data-target="nav-mobile" class="top-nav right-btn sidenav-trigger full hide-on-large-only"><i class="material-icons">close</i></a>
+      </div>
+    </header>
+    <main>
+      <div class="row">
+        <form class="col s12" style="margin-top:10px">
+          <div class="row">
+            <div class="input-field col m6 s12">
+              <input placeholder="id@email.com" id="ipt1" type="text" class="validate">
+              <label for="ipt1">email</label>
+            </div>
+						<div class="input-field col m6 s12">
+              <input placeholder="passwd" id="ipt1" type="text" class="validate">
+              <label for="ipt1">passwd</label>
+            </div>
+						<div class="input-field col m6 s12">
+              <input placeholder="confirm" id="ipt1" type="text" class="validate">
+              <label for="ipt1">confirm</label>
+            </div>
+					</div>
+					<div class="row">
+						<div class="input-field col m6 s12">
+              <input placeholder="passwd problem" id="ipt1" type="text" class="validate">
+              <label for="ipt1">problem</label>
+            </div>
+						<div class="input-field col m6 s12">
+              <input placeholder="passwd solution" id="ipt1" type="text" class="validate">
+              <label for="ipt1">solution</label>
+            </div>
+
+          </div>
+          <button class="btn waves-effect waves-light" type="submit" name="action" style="width:100%; background-color:#ee6e73">Submit
+            <i class="material-icons right">send</i>
+          </button>
+        </form>
+      </div>
+    </main>
+</body>
+</html>
