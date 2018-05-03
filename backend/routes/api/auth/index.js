@@ -12,4 +12,4 @@ router.get('/info', controller.info);
 router.use('/refresh', authMiddleware.check);
 router.get('/refresh', controller.refresh);
 
-module.exports = router
+exports.router = router;
