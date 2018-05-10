@@ -55,7 +55,7 @@ exports.createIO = async (req) => {
       'sensorID': create.result,
     });
   } else {
-    return ApiRes(false, 'URR9000', '센서 등록 실패');
+    return ApiRes(false, 'USR9000', '센서 등록 실패');
   }
 }
 
@@ -75,8 +75,8 @@ exports.updateIO = async (req) => {
   const create = await Sensor.update(tbl, ipt);
 
   if(create.status) {
-    return ApiRes(true, 'US0000', '센서값 업데이트 성공');
+    return ApiRes(true, 'USU0000', '센서값 업데이트 성공');
   } else {
-    return ApiRes(false, 'UR9000', '센서값 업데이트 실패');
+    return ApiRes(false, 'USU9000', '센서값 업데이트 실패');
   }
 }
