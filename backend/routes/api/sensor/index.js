@@ -6,9 +6,26 @@ router.use('/', authMiddleware.check);
 router.post('/update', controller.update);
 
 const io = (sock) => {
-    sock.on('/register',(res) => {
-        console.log('io-sensor/register');
-        console.log(res);
+    const category = 'sensor';
+
+    sock.on(`req/${category}/create`, async (req) => {
+        console.log('io-sensor/create');
+        console.log(req);
+
+        const rtn = await controller.createIO(req);
+        console.log(rtn)
+
+        sock.emit(`res/${category}/create`,rtn);
+    });
+
+    sock.on(`req/${category}/update`, async (req) => {
+        console.log('io-sensor/update');
+        console.log(req);
+
+        const rtn = await controller.updateIO(req);
+        console.log(rtn)
+
+        sock.emit(`res/${category}/update`, rtn);
     });
 };
 

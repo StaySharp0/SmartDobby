@@ -5,6 +5,21 @@ const tbl = {
     type: 'SensorType',
 };
 
+exports.create = function(ipt) {
+    return knex(tbl.info).insert(ipt)
+        .then((result) => {
+            return {
+                status: true,
+                result: result[0],
+            };
+        }).catch((err) => {
+            return {
+                status: false,
+                code: err.code,
+            };
+    });
+}
+
 exports.getInfo = function(ipt) {
     return knex(tbl.info).where('SID',ipt.sid).select()
             .then((result) => {
@@ -41,3 +56,10 @@ exports.update = function (ltbl,ipt) {
             };
         });
 };
+
+exports.findSensorType = function(ipt) {
+    return knex(tbl.type).where('name',ipt.type).select('TID')
+            .then((result) => {
+                return result[0].TID;
+            });
+}
