@@ -32,14 +32,27 @@ exports.getInfo = function(ipt) {
                     dashboard   : !!i.dashboard,
                     chart       : !!i.chart,
                 };
-            });
+            }).catch((err) => {
+                return {
+                    status: false,
+                    code: err.code,
+                };
+        });
 }
 
 exports.findLogTable = function(ipt) {
     return knex(tbl.type).where('TID',ipt.tid).select('logTableName')
             .then((result) => {
-                return result[0].logTableName;
-            });
+                return {
+                    status: true,
+                    result: result[0].logTableName,
+                };
+            }).catch((err) => {
+                return {
+                    status: false,
+                    code: err.code,
+                };
+        });
 }
 
 exports.update = function (ltbl,ipt) {
@@ -60,6 +73,15 @@ exports.update = function (ltbl,ipt) {
 exports.findSensorType = function(ipt) {
     return knex(tbl.type).where('name',ipt.type).select('TID')
             .then((result) => {
-                return result[0].TID;
-            });
+                print(result)
+                return {
+                    status: false,
+                    result: result[0].TID,
+                };
+            }).catch((err) => {
+                return {
+                    status: false,
+                    code: err.code,
+                };
+        });
 }

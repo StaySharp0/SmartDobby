@@ -22,9 +22,15 @@ exports.update = async (req, res) => {
     value: body.value,
   };
   
-  const info = await Sensor.getInfo(ipt);
-  const tbl = await Sensor.findLogTable(info);
-  const create = await Sensor.update(tbl,ipt);
+  let info = await Sensor.getInfo(ipt);
+  if(!info.status) return ApiRes(false, 'USU9000', '센서값 업데이트 실패');
+  else info = info.result;
+
+  let tbl = await Sensor.findLogTable(info);
+  if(!tbl.status) return ApiRes(false, 'USU9000', '센서값 업데이트 실패');
+  else tbl = tbl.result;
+  
+  const create = await Sensor.update(tbl, ipt);
   //console.log('resulte',create);
 
   if(create.status) {
@@ -42,10 +48,13 @@ exports.createIO = async (req) => {
   const body = req;
   const ipt = {
     GID: body.gid,
-    TID: await Sensor.findSensorType(body),
+    TID: '',
     name: body.name,
   };
-  
+
+  const tid = await Sensor.findSensorType(body);
+  if(!tid.status) return ApiRes(false, 'USR9000', '센서 등록 실패');
+  ipt.TID = tid.result;
   const create = await Sensor.create(ipt);
   // console.log(create)
   
@@ -70,8 +79,14 @@ exports.updateIO = async (req) => {
     value: body.value,
   };
   
-  const info = await Sensor.getInfo(ipt);
-  const tbl = await Sensor.findLogTable(info);
+  let info = await Sensor.getInfo(ipt);
+  if(!info.status) return ApiRes(false, 'USU9000', '센서값 업데이트 실패');
+  else info = info.result;
+
+  let tbl = await Sensor.findLogTable(info);
+  if(!tbl.status) return ApiRes(false, 'USU9000', '센서값 업데이트 실패');
+  else tbl = tbl.result;
+
   const create = await Sensor.update(tbl, ipt);
 
   if(create.status) {
