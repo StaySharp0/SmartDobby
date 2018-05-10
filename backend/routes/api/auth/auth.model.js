@@ -2,9 +2,11 @@ const knex = require('../knex-mysql.js');
 const crypto = require('crypto');
 const config = require('../config.js');
 const tbl = 'User';
+const gtbl = 'UGateway';
 
 exports.errCode = {
   'ER_DUP_ENTRY': '이미 등록된 아이디입니다.',
+  'ER_NO_REFERENCED_ROW_2': '등록된 유저가 아닙니다.'
 };
 
 exports.create = function (ipt) {
@@ -57,4 +59,19 @@ exports.verify = function (user,ipt) {
                     .digest('base64');
   
   return user.passwd === encrypted;
+}
+
+exports.createGateway = function (ipt) {
+  return knex(gtbl).insert(ipt)
+    .then((result) => {
+      return {
+        status: true,
+        result: result[0],
+      };
+    }).catch((err) => {
+      return {
+        status: false,
+        code: err.code,
+      };
+    });
 }

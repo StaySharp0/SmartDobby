@@ -23,7 +23,7 @@ exports.register = async (req, res) => {
   };
 
   const create = await User.create(ipt);
-  console.log('resulte',create);
+  // console.log('resulte',create);
 
   if(create.status) {
     res.status(200).json(ApiRes(true, 'UR0000', '유저등록 성공'));
@@ -113,4 +113,31 @@ exports.refresh = async (req, res) => {
   const jwt = await makeJWT(ipt, secret);
 
   return res.status(200).json(ApiRes(false, 'UR0000', '유저 토큰 재생성 성공',jwt));
+}
+
+/*
+    IO req/auth/gatway/create
+    {
+      User ID
+      Gatway Name
+    }
+*/
+exports.createGatwayIO = async (req) => {
+  const ipt = {
+    UID: req.id,
+    name: req.name,
+  };
+  
+  const create = await User.createGateway(ipt);
+  // console.log('resulte',create);
+
+  if(create.status){
+    return ApiRes(true, 'UR0000', '유저 게이트웨이 등록 성공',{
+      'gatewayID': create.result,
+    });
+  } else {
+    return ApiRes(false, 'UR9000', '유저 게이트웨이 등록 실패', {
+      errMessage: User.errCode[create.code],
+    });
+  }
 }
