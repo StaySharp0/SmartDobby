@@ -1,4 +1,5 @@
 const mmnt = require('moment');
+const _ = require('lodash');
 const Sensor = require('./sensor.model.js');
 
 /*
@@ -40,6 +41,49 @@ exports.update = async (req, res) => {
   }
 }
 
+/*
+    POST /api/sensor/list
+    {
+      token,
+    }
+*/
+exports.list = async (req, res) => {
+  console.log('Api:sensorList');
+  //console.log('body',req.body);
+  
+  const ipt = {
+    uid: req.decoded._id
+  };
+  try {
+    let sensorList = await Sensor.getInfoList(ipt);
+
+    let rtn = await Promise.all(_.map(sensorList, async(i) => { 
+      let val = await Sensor.getCurrentValues(i.table, {id: i.id});
+      let result = {
+        _id:        i.id,
+        name:       i.name,
+        type:       i.type,
+        period:     i.period,
+        dashboard:  i.dashboard,
+        chart:      i.chart,
+        link:       false,
+      }
+
+      if (val.length > 0){
+        result.value    = val[0].value;
+        result.history  = mmnt(val.time).format("YYYY.MM.DD HH:mm:ss");
+        result.link     = true;
+      }
+      
+      return result;
+    }));
+    
+    return res.status(200).json(ApiRes(true, 'US0000', '센서 정보리스트 조회 성공', rtn));
+  } catch (e) {
+    console.log(e)
+    return res.status(400).json(ApiRes(false, 'USU9000', '센서 정보리스트 조회 실패'));
+  }
+}
 
 exports.createIO = async (req) => {
   console.log('Api.io:sensorCreate');

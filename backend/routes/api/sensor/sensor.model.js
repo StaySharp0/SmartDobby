@@ -1,5 +1,6 @@
 const knex = require('../knex-mysql.js');
 const config = require('../config.js');
+const _ = require('lodash');
 const tbl = {
     info: 'USensor',
     type: 'SensorType',
@@ -40,6 +41,26 @@ exports.getInfo = function(ipt) {
         });
 }
 
+exports.getInfoList = function(ipt){
+    return knex(tbl.info)
+            .column('SID',`${tbl.info}.name`,{'type':`${tbl.type}.name`},'period','dashboard','chart','LogTableName')
+            .join(tbl.type, `${tbl.info}.TID`, `${tbl.type}.TID`)
+            .where(`${tbl.info}.TID`,ipt.uid).select()
+            .then((result) => {
+                return _.map(result, (i) => {
+                    return {
+                        id          : i.SID,
+                        name        : i.name,
+                        type        : i.type,
+                        period      : i.period,
+                        dashboard   : !!i.dashboard,
+                        chart       : !!i.chart,
+                        table       : i.LogTableName,
+                    }
+                })
+            });
+}
+
 exports.findLogTable = function(ipt) {
     return knex(tbl.type).where('TID',ipt.tid).select('logTableName')
             .then((result) => {
@@ -55,21 +76,6 @@ exports.findLogTable = function(ipt) {
         });
 }
 
-exports.update = function (ltbl,ipt) {
-    return knex(ltbl).insert(ipt)
-        .then((result) => {
-            return {
-                status: true,
-            };
-        })
-        .catch((err) => {
-            return {
-                status: false,
-                code: err.code,
-            };
-        });
-};
-
 exports.findSensorType = function(ipt) {
     return knex(tbl.type).where('name',ipt.type).select('TID')
             .then((result) => {
@@ -84,4 +90,23 @@ exports.findSensorType = function(ipt) {
                     code: err.code,
                 };
         });
+}
+
+exports.update = function (ltbl, ipt) {
+    return knex(ltbl).insert(ipt)
+        .then((result) => {
+            return {
+                status: true,
+            };
+        })
+        .catch((err) => {
+            return {
+                status: false,
+                code: err.code,
+            };
+        });
+};
+
+exports.getCurrentValues = function(ltbl, ipt) {
+    return knex(ltbl).where('SID',ipt.id).select().limit(10).orderBy('idx','desc');
 }
