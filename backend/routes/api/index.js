@@ -13,9 +13,12 @@ const router = require('express').Router();
 const auth = require('./auth');
 const sensor = require('./sensor');
 const gateway = require('./gateway');
+const page = require('./page');
 
 router.use('/auth', auth.router);
-router.use('/sensor', sensor.router);
 router.use('/gateway', gateway.router);
+router.use('/sensor', sensor.router);
+router.use('/page', page.router);
+
 
 module.exports = router;
