@@ -58,17 +58,11 @@ exports.list = async (req, res) => {
     let sensorList = await Sensor.getInfoList(ipt);
 
     let rtn = await Promise.all(_.map(sensorList, async(i) => { 
-      let val = await Sensor.getCurrentValues(i.table, {id: i.id});
-      let result = {
-        _id:        i.id,
-        name:       i.name,
-        type:       i.type,
-        period:     i.period,
-        dashboard:  i.dashboard,
-        chart:      i.chart,
-        link:       false,
-      }
+      let val = await Sensor.getCurrentValues(i.table, {id: i.sid});
+      let result = _.omit(i,['table']);
 
+      // 주기로 link가 제대로 동작하는지 확인하는 롲기 들어가야함
+      result.link = false;
       if (val.length > 0){
         result.value    = val[0].value;
         result.history  = mmnt(val.time).format("YYYY.MM.DD HH:mm:ss");

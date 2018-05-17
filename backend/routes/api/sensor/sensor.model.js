@@ -2,6 +2,7 @@ const knex = require('../knex-mysql.js');
 const config = require('../config.js');
 const _ = require('lodash');
 const tbl = {
+    gateway: 'UGateway',
     info: 'USensor',
     type: 'SensorType',
 };
@@ -44,12 +45,14 @@ exports.getInfo = function(ipt) {
 exports.getInfoList = function(ipt){
     return knex(tbl.info)
             .column('SID',`${tbl.info}.name`,{'type':`${tbl.type}.name`},'period','dashboard','chart','LogTableName')
+            .join(tbl.gateway, `${tbl.gateway}.GID`, `${tbl.info}.GID`)
             .join(tbl.type, `${tbl.info}.TID`, `${tbl.type}.TID`)
-            .where(`${tbl.info}.TID`,ipt.uid).select()
+            .where(`${tbl.gateway}.UID`,ipt.uid).select()
             .then((result) => {
                 return _.map(result, (i) => {
                     return {
-                        id          : i.SID,
+                        sid         : i.SID,
+                        gid         : i.GID,
                         name        : i.name,
                         type        : i.type,
                         period      : i.period,
