@@ -3,7 +3,9 @@
     <page-header :small="true"/>
     <main>
       <div class="row">
-        <card-sensor />
+        <div v-for="sensor in sensorList" :key="sensor._id">
+          <card-sensor :item="sensor"/>
+        </div>
         <card-remocon />
         <card-chart />
       </div>
@@ -19,8 +21,19 @@ import CardChart from '@/components/DashCard/chart';
 
 export default {
   name: 'page-DashBoard',
+  created() {
+    const jwt = JSON.parse(localStorage.getItem('dobby'));
+
+    this.$http.get('/api/sensor/list')
+      .then((response) => {
+        const res = response.data;
+        this.sensorList = res.data;
+      });
+  },
   data() {
-    return {};
+    return {
+      sensorList: [],
+    };
   },
   components: {
     'page-header': PageHeader,
