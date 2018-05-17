@@ -23,11 +23,11 @@ exports.update = async (req, res) => {
   };
   
   let info = await Sensor.getInfo(ipt);
-  if(!info.status) return ApiRes(false, 'USU9000', '센서값 업데이트 실패');
+  if(!info.status) return res.status(400).json(ApiRes(false, 'UR9000', '센서값 업데이트 실패'));
   else info = info.result;
 
   let tbl = await Sensor.findLogTable(info);
-  if(!tbl.status) return ApiRes(false, 'USU9000', '센서값 업데이트 실패');
+  if(!tbl.status) return res.status(400).json(ApiRes(false, 'UR9000', '센서값 업데이트 실패'));
   else tbl = tbl.result;
   
   const create = await Sensor.update(tbl, ipt);
