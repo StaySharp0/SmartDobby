@@ -44,7 +44,7 @@ exports.getInfo = function(ipt) {
 
 exports.getInfoList = function(ipt){
     return knex(tbl.info)
-            .column('SID',`${tbl.info}.name`,{'type':`${tbl.type}.name`},'period','dashboard','chart','LogTableName')
+            .column('SID',`${tbl.info}.GID`,`${tbl.info}.name`,{'type':`${tbl.type}.name`},'period','dashboard','chart','LogTableName')
             .join(tbl.gateway, `${tbl.gateway}.GID`, `${tbl.info}.GID`)
             .join(tbl.type, `${tbl.info}.TID`, `${tbl.type}.TID`)
             .where(`${tbl.gateway}.UID`,ipt.uid).select()
