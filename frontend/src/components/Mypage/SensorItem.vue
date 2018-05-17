@@ -22,11 +22,11 @@ export default {
           id: 0,
           type: 'temperature',
           name: '4층 PC실 중앙 온도계',
-          status: '정상',
+          link: true,
           history: 'yy-mm-dd HH:MM',
           mainView: true,
           chartView: false,
-          cycle: '5m',
+          period: '5m',
         };
       },
     },

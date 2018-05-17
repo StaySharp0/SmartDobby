@@ -11,8 +11,8 @@
         </div>
         <div class="input-field col m6 s12">
           <input id="ipt1" type="text" class="validate"
-                 :placeholder="item.origin.cycle"
-                 v-model="item.ipt.cycle">
+                 :placeholder="item.origin.period"
+                 v-model="item.ipt.period">
           <label for="ipt1">주기</label>
         </div>
         <div class="input-field col m6 s6">
@@ -20,7 +20,7 @@
             <label class="active">메인</label>
              <label>
                Off
-               <input type="checkbox" v-model="item.ipt.mainView">
+               <input type="checkbox" v-model="item.ipt.dashboard">
                <span class="lever"></span>
                On
              </label>
@@ -31,7 +31,7 @@
             <label class="active">차트</label>
             <label>
               Off
-              <input type="checkbox" v-model="item.ipt.chartView">
+              <input type="checkbox" v-model="item.ipt.chart">
               <span class="lever"></span>
               On
             </label>
@@ -63,15 +63,15 @@ export default {
         origin: {
           id: 0,
           name: '4층 PC실 중앙 온도계',
-          mainView: true,
-          chartView: false,
-          cycle: '5m',
+          dashboard: true,
+          chart: false,
+          period: '5m',
         },
         ipt: {
           name: '4층 PC실 중앙 온도계',
-          cycle: '5m',
-          mainView: true,
-          chartView: false,
+          period: '5m',
+          dashboard: true,
+          chart: false,
         },
       },
     };
