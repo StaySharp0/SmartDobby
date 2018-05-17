@@ -2,12 +2,13 @@
   <div>
     <page-header :small="true"/>
     <main>
-      <div class="row">
-        <div v-for="sensor in sensorList" :key="sensor._id">
+      <div v-for="g in gateways" :key="g.id">
+        <h3>{{g.name}}</h3>
+        <div class="row" v-for="sensor in g.sensor" :key="sensor._id">
           <card-sensor :item="sensor"/>
+          <!-- <card-remocon />
+          <card-chart /> -->
         </div>
-        <card-remocon />
-        <card-chart />
       </div>
     </main>
   </div>
@@ -22,17 +23,15 @@ import CardChart from '@/components/DashCard/chart';
 export default {
   name: 'page-DashBoard',
   created() {
-    const jwt = JSON.parse(localStorage.getItem('dobby'));
-
-    this.$http.get('/api/sensor/list')
+    this.$http.get('/api/page/dashboard')
       .then((response) => {
         const res = response.data;
-        this.sensorList = res.data;
+        this.gateways = res.data;
       });
   },
   data() {
     return {
-      sensorList: [],
+      gateways: [],
     };
   },
   components: {
@@ -43,3 +42,10 @@ export default {
   },
 };
 </script>
+
+<style>
+  h3 {
+    padding-left: 1rem;
+    font-size: 1.65rem;
+  }
+</style>
