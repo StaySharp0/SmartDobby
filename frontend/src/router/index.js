@@ -20,6 +20,7 @@ const verifyJWTinRouter = (to, from, next) => {
 
   if (jwt) {
     const now = mt().valueOf();
+    Vue.prototype.$http.defaults.headers.common['x-access-token'] = jwt.token;
 
     // Refresh Token
     if (now > jwt.refreshTime) {
@@ -31,7 +32,10 @@ const verifyJWTinRouter = (to, from, next) => {
           refreshTime: mt().add(7, 'days').valueOf(),
         });
 
+        Vue.prototype.$http.defaults.headers.common['x-access-token'] = res.data.data;
         localStorage.setItem('dobby', item);
+      }).catch(() => {
+        next('/signin');
       });
     }
 
