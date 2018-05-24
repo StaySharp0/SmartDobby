@@ -14,10 +14,12 @@ const auth = require('./auth');
 const sensor = require('./sensor');
 const gateway = require('./gateway');
 const page = require('./page');
+const scheduler = require('./scheduler');
 
 router.use('/auth', auth.router);
 router.use('/gateway', gateway.router);
 router.use('/sensor', sensor.router);
+router.use('/scheduler', scheduler.router);
 router.use('/page', page.router);
 
 
