@@ -7,7 +7,7 @@ const authMiddleware = require('../middlewares/auth');
 const Sensor = require('../sensor/sensor.model');
 const Gateway = require('../gateway/gateway.model');
 
-router.use('/', authMiddleware.check);
+router.use('/*', authMiddleware.check);
 router.get('/mypage', async (req, res) => {
   console.log('APIpage: mypage');
   
@@ -53,7 +53,6 @@ router.get('/mypage', async (req, res) => {
 
 router.get('/dashboard', async (req, res) => {
   console.log('APIpage: dashboard');
-  
   const ipt = {
     uid: req.decoded._id
   };
