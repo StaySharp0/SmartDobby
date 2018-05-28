@@ -51,5 +51,6 @@ module.exports = {
     'no-underscore-dangle': 0,
     'no-console': ["error",  { allow: ["warn", "error","log"] }],
     'no-alert': 0,
+    'no-unused-vars': 0,
   }
 }
