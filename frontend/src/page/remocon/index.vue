@@ -10,11 +10,11 @@
       </div>
       <div class="center">
         <a class="btn-floating btn-large waves-effect waves-light blur dropdown-trigger"
-           href='#' data-target='dropdown1'><i class="material-icons">add</i></a>
+           href='#' data-target='addNewRemocon'><i class="material-icons">add</i></a>
       </div>
-      <ul id='dropdown1' class='dropdown-content'>
+      <ul id='addNewRemocon' class='dropdown-content'>
         <li><a href="#!">새 리모컨</a></li>
-        <li><a href="#!">매크로</a></li>
+        <li><a href="/Remocon/Macro/add">매크로</a></li>
       </ul>
     </div>
     </main>
@@ -54,7 +54,8 @@ export default {
     transition: background-color .2s;
   }
 
-  .btn-floating.blur{
+  .btn-rounding:hover,
+  .btn-floating.blur {
     background: rgba(233,233,233,.2);
   }
 
@@ -62,9 +63,11 @@ export default {
     color: #666;
   }
 
+  #addNewRemocon {
+    transform: translateX(20px);
+  }
+
   .dropdown-content {
-    margin-top: 60px!important;
-    margin-left: -21px!important;
     border-radius: 8px;
   }
 

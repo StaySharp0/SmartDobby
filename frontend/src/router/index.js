@@ -9,8 +9,7 @@ import MyPage from '@/page/user/mypage';
 
 import DashBoard from '@/page/dashboard';
 import Remocon from '@/page/remocon/index';
-// import RemoconAdd from '@/page/remocon/add';
-
+import RemoconAddMacro from '@/page/remocon/addMacro';
 import Scheduler from '@/page/scheduler/index';
 import SchedulerAdd from '@/page/scheduler/add';
 
@@ -79,12 +78,14 @@ export default new Router({
       path: '/Remocon',
       name: 'Remocon',
       component: Remocon,
+      beforeEnter: verifyJWTinRouter,
     },
-    // {
-    //   path: '/Remocon/add',
-    //   name: 'RemoconAdd',
-    //   component: RemoconAdd,
-    // },
+    {
+      path: '/Remocon/macro/add',
+      name: 'RemoconAddMacro',
+      component: RemoconAddMacro,
+      beforeEnter: verifyJWTinRouter,
+    },
     {
       path: '/Scheduler',
       name: 'Scheduler',
