@@ -60,18 +60,3 @@ exports.verify = function (user,ipt) {
   
   return user.passwd === encrypted;
 }
-
-exports.createGateway = function (ipt) {
-  return knex(gtbl).insert(ipt)
-    .then((result) => {
-      return {
-        status: true,
-        result: result[0],
-      };
-    }).catch((err) => {
-      return {
-        status: false,
-        code: err.code,
-      };
-    });
-}

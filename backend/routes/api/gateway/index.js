@@ -8,15 +8,15 @@ router.get('/list',controller.list);
 const io = (sock) => {
     const category = 'gateway';
 
-    // sock.on(`req/${category}/create`, async (req) => {
-    //     console.log('io-sensor/create');
-    //     console.log(req);
+    sock.on(`req/${category}/create`, async (req) => {
+        console.log('io-sensor/create');
+        console.log(req);
 
-    //     const rtn = await controller.createIO(req);
-    //     console.log(rtn)
+        const rtn = await controller.create(req);
+        console.log(rtn);
 
-    //     sock.emit(`res/${category}/create`,rtn);
-    // });
+        sock.emit(`res/${category}/create`,rtn);
+    });
 
     // sock.on(`req/${category}/update`, async (req) => {
     //     console.log('io-sensor/update');

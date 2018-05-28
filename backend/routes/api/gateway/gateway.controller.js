@@ -3,6 +3,36 @@ const _ = require('lodash');
 const Gateway = require('./gateway.model.js');
 
 /*
+    IO req/gatway/create
+    {
+      token,
+      id: userID,
+      name: default gateway name,
+      mac_addr: gateway mac address,
+    }
+*/
+exports.create = async (req) => {
+  const ipt = {
+    UID: req.id,
+    name: req.name,
+    MAC: req.mac_addr,
+  };
+  
+  const create = await Gateway.createGateway(ipt);
+  console.log('resulte',create);
+
+  if(create.status){
+    return ApiRes(true, 'UR0000', '유저 게이트웨이 등록 성공',{
+      'gatewayID': create.result,
+    });
+  } else {
+    return ApiRes(false, 'UR9000', '유저 게이트웨이 등록 실패', {
+      errMessage: User.errCode[create.code],
+    });
+  }
+}
+
+/*
     get /api/gateway/list
     {
       token,

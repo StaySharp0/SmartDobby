@@ -14,16 +14,6 @@ router.get('/refresh', controller.refresh);
 
 const io = (sock) => {
     const category = 'auth';
-
-    sock.on(`req/${category}/gateway/create`, async (req) => {
-        console.log('io-gatway/create');
-        console.log(req);
-
-        const rtn = await controller.createGatwayIO(req);
-        // console.log(rtn);
-
-        sock.emit(`res/${category}/gateway/create`,rtn);
-    });
 };
 
 exports.router = router;
