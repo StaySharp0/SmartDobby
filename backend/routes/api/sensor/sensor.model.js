@@ -82,9 +82,8 @@ exports.findLogTable = function(ipt) {
 exports.findSensorType = function(ipt) {
     return knex(tbl.type).where('name',ipt.type).select('TID')
             .then((result) => {
-                print(result)
                 return {
-                    status: false,
+                    status: true,
                     result: result[0].TID,
                 };
             }).catch((err) => {
