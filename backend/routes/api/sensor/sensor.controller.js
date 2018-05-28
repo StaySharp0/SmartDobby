@@ -79,26 +79,35 @@ exports.list = async (req, res) => {
   }
 }
 
+/*
+    IO req/sensor/create
+    {
+      token,
+      _id: sensor id in gateway,
+      gid: gateway ID,
+      type: sensor type,
+      name: default sensor name,
+    }
+*/
 exports.createIO = async (req) => {
   console.log('Api.io:sensorCreate');
   console.log('body',req);
 
-  const body = req;
   const ipt = {
-    GID: body.gid,
+    GID: req.gid,
     TID: '',
-    name: body.name,
+    name: req.name,
   };
 
-  const tid = await Sensor.findSensorType(body);
-  if(!tid.status) return ApiRes(false, 'USR9000', '센서 등록 실패');
+  const tid = await Sensor.findSensorType({type:req.type});
+  if(!tid.status) return ApiRes(false, 'USR9001', '센서 등록 실패(정확하지 않은 센서 타입)');
   ipt.TID = tid.result;
   const create = await Sensor.create(ipt);
   // console.log(create)
   
   if(create.status) {
     return ApiRes(true, 'USR0000', '센서 등록 성공',{
-      '_id': body._id,
+      '_id': req._id,
       'sensorID': create.result,
     });
   } else {
