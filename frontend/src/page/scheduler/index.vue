@@ -1,22 +1,17 @@
 <template>
   <div>
-    <page-header title="Remocon"/>
+    <page-header title="Scheduler"/>
 
     <main>
       <div class="container">
         <div class="row" style="margin-top: 30px">
-          <a class="waves-effect waves-light btn btn-rounding">4층 에어컨 전원 버튼</a>
-          <a class="waves-effect waves-light btn btn-rounding">5층 에어컨 전원 버튼</a>
+          <a class="waves-effect waves-light btn btn-rounding">강의시간 전 5층 에어컨 동작</a>
+        </div>
       </div>
       <div class="center">
         <a class="btn-floating btn-large waves-effect waves-light blur dropdown-trigger"
-           href='#' data-target='dropdown1'><i class="material-icons">add</i></a>
+           href='/Scheduler/Add'><i class="material-icons">add</i></a>
       </div>
-      <ul id='dropdown1' class='dropdown-content'>
-        <li><a href="#!">새 리모컨</a></li>
-        <li><a href="#!">매크로</a></li>
-      </ul>
-    </div>
     </main>
   </div>
 </template>
@@ -25,16 +20,17 @@
 import PageHeader from '@/components/Header';
 
 export default {
-  name: 'page-Remocon',
+  name: 'page-Scheduler',
   data() {
     return {};
   },
   components: {
     'page-header': PageHeader,
   },
-  mounted() {
-    const elems = document.querySelectorAll('.dropdown-trigger');
-    const instances = window.M.Dropdown.init(elems, {});
+  created() {
+    // this.$http.get('/api/scheduler/list')
+    //   .then((response) => {
+    //   });
   },
 };
 </script>

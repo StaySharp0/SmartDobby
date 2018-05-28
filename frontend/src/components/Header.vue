@@ -26,8 +26,7 @@
       <!-- <li><a class="subheader">Subheader</a></li> -->
       <li><a class="waves-effect" href="/">DashBoard</a></li>
       <li><a class="waves-effect" href="/Remocon">Remocon</a></li>
-      <li><a class="waves-effect" href="#!">Scheduler</a></li>
-      <li><a class="waves-effect" href="#!">Gateway</a></li>
+      <li><a class="waves-effect" href="/Scheduler">Scheduler</a></li>
       <li><a class="waves-effect" href="/Mypage">MyPage</a></li>
       <li><div class="divider"></div></li>
       <li><a @click="logout">Logout</a></li>

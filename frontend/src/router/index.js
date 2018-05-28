@@ -8,8 +8,11 @@ import SignUp from '@/page/user/signup';
 import MyPage from '@/page/user/mypage';
 
 import DashBoard from '@/page/dashboard';
-// import Remocon from '@/page/remocon/index';
+import Remocon from '@/page/remocon/index';
 // import RemoconAdd from '@/page/remocon/add';
+
+import Scheduler from '@/page/scheduler/index';
+import SchedulerAdd from '@/page/scheduler/add';
 
 Vue.use(Router);
 
@@ -72,15 +75,27 @@ export default new Router({
       component: MyPage,
       beforeEnter: verifyJWTinRouter,
     },
-    // {
-    //   path: '/Remocon',
-    //   name: 'Remocon',
-    //   component: Remocon,
-    // },
+    {
+      path: '/Remocon',
+      name: 'Remocon',
+      component: Remocon,
+    },
     // {
     //   path: '/Remocon/add',
     //   name: 'RemoconAdd',
     //   component: RemoconAdd,
     // },
+    {
+      path: '/Scheduler',
+      name: 'Scheduler',
+      component: Scheduler,
+      beforeEnter: verifyJWTinRouter,
+    },
+    {
+      path: '/Scheduler/Add',
+      name: 'SchedulerAdd',
+      component: SchedulerAdd,
+      beforeEnter: verifyJWTinRouter,
+    },
   ],
 });
