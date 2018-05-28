@@ -1,6 +1,6 @@
 <template>
   <header>
-    <nav class="top-nav" :class="{ 'small':small }">
+    <nav class="top-nav" :class="{ 'middle':middle, 'small':small }">
       <div class="container">
         <div class="nav-wrapper">
           <h2 class="header center">{{title}}</h2>
@@ -40,6 +40,10 @@ export default {
   props: {
     title: String,
     small: {
+      type: Boolean,
+      default: false,
+    },
+    middle: {
       type: Boolean,
       default: false,
     },
@@ -122,6 +126,10 @@ export default {
     margin: 0;
     padding-top: 26px;color: #ee6e73;
     font-weight: 400;
+  }
+  nav.top-nav.middle h2.header {
+    padding-top: 36px;
+    font-size: 2.6rem;
   }
   nav.top-nav.small { height: 56px; }
   nav.top-nav.small .container { margin: 0 55px; }
