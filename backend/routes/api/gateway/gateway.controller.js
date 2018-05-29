@@ -6,14 +6,13 @@ const Gateway = require('./gateway.model.js');
     IO req/gatway/create
     {
       token,
-      id: userID,
       name: default gateway name,
       mac_addr: gateway mac address,
     }
 */
-exports.create = async (req) => {
+exports.create = async (req, jwt) => {
   const ipt = {
-    UID: req.id,
+    UID: jwt._id,
     name: req.name,
     MAC: req.mac_addr,
   };

@@ -5,7 +5,11 @@
         <div class="card-title">
           {{item.type}}
           <a class="card-btn">
-            <i class="material-icons" :class="{'green-text': item.link}">autorenew</i>
+            <i class="material-icons"
+              :class="{'green-text': item.link}"
+              @click="refresh">
+              autorenew
+            </i>
           </a>
         </div>
         <div class="row" style="margin:0">
@@ -23,6 +27,9 @@
 </template>
 
 <script>
+import io from '@/router/io';
+import Vue from 'vue';
+
 export default {
   name: 'card-sensor',
   props: {
@@ -30,14 +37,55 @@ export default {
       type: Object,
       default() {
         return {
-          name: '5층 PC실 온도',
-          type: '온도계',
+          gid: 1,
+          sid: 1,
+          history: 'YYYY.MM.DD HH:HH:SS',
+          name: '테스트 온도센서',
+          type: 'temperature',
+          value: '16',
+          period: '1h',
           link: true,
-          value: '16°C',
-          history: '2018.03.29 18:29',
+          chart: false,
+          dashboard: true,
         };
       },
     },
+  },
+  data() {
+    return {
+      sensorListener: '',
+    };
+  },
+  methods: {
+    refresh() {
+      const { gid, sid } = this.item;
+      const socket = io.getSocket();
+
+      if (socket) {
+        socket.emit('req/sensor/refresh', { gid, sid });
+      }
+    },
+  },
+  mounted() {
+    const { gid, sid } = this.item;
+    const socket = io.getSocket();
+
+    if (socket) {
+      const sensorListener = `res/sensor/refresh/${gid}/${sid}`;
+
+      socket.on(sensorListener, (res) => {
+        this.item.value = res.value;
+        this.item.history = res.history;
+      });
+      this.sensorListener = sensorListener;
+    }
+  },
+  destroyed() {
+    const socket = io.getSocket();
+
+    if (socket) {
+      socket.off(this.sensorListener);
+    }
   },
 };
 </script>

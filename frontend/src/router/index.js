@@ -12,6 +12,7 @@ import Remocon from '@/page/remocon/index';
 import RemoconAddMacro from '@/page/remocon/addMacro';
 import Scheduler from '@/page/scheduler/index';
 import SchedulerAdd from '@/page/scheduler/add';
+import io from '@/router/io';
 
 Vue.use(Router);
 
@@ -23,6 +24,7 @@ const verifyJWTinRouter = (to, from, next) => {
   if (jwt) {
     const now = mt().valueOf();
     Vue.prototype.$http.defaults.headers.common['x-access-token'] = jwt.token;
+    if (!io.isInit) io.init(jwt.token);
 
     // Refresh Token
     if (now > jwt.refreshTime) {

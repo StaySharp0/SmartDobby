@@ -88,6 +88,7 @@ exports.list = async (req, res) => {
       type: sensor type,
       name: default sensor name,
     }
+    Complete
 */
 exports.createIO = async (req) => {
   console.log('Api.io:sensorCreate');
@@ -115,23 +116,32 @@ exports.createIO = async (req) => {
   }
 }
 
+/*
+    IO req/sensor/update
+    {
+      { token },
+      gid: gateway ID,
+      sid: sensor ID,
+      { time },
+      { value },
+    }
+*/
 exports.updateIO = async (req) => {
   console.log('Api.io:sensorUpdate');
-  console.log('body',req);
+  console.log(req);
 
-  const body = req;
   const ipt = {
-    sid: body.id,
-    time: mmnt(new Date(body.time)).format("YYYY-MM-DD HH:mm:ss"),
-    value: body.value,
+    sid: req.sid,
+    time: mmnt(new Date(req.time)).format("YYYY-MM-DD HH:mm:ss"),
+    value: req.value,
   };
   
   let info = await Sensor.getInfo(ipt);
-  if(!info.status) return ApiRes(false, 'USU9000', '센서값 업데이트 실패');
+  if(!info.status) return ApiRes(false, 'USU9001', '센서값 업데이트 실패(부정확한 센서 아이디)');
   else info = info.result;
 
   let tbl = await Sensor.findLogTable(info);
-  if(!tbl.status) return ApiRes(false, 'USU9000', '센서값 업데이트 실패');
+  if(!tbl.status) return ApiRes(false, 'USU9002', '센서값 업데이트 실패(부정확한 센서 타입)');
   else tbl = tbl.result;
 
   const create = await Sensor.update(tbl, ipt);

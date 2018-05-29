@@ -9,6 +9,7 @@
 
 "use strict";
 const jwt = require('jsonwebtoken');
+const config = require('../config.js');
 
 const verifyJWT = (token, secret) => {
     return  new Promise((resolve, reject) => {
@@ -18,6 +19,17 @@ const verifyJWT = (token, secret) => {
         });
     });
 };
+
+exports.checkIO = async (socket, next) => {
+    const token = socket.request.headers['x-access-token'];
+    const secret = config.secret;
+
+    if (token) {
+        socket.decoded = await verifyJWT(token, secret);
+        console.log(socket)
+    }
+    next();
+}
 
 exports.check = async (req, res, next) => {
     // read the token from header or url 

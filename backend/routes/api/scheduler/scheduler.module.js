@@ -11,17 +11,14 @@ const _ = require('lodash');
  *     knex = require('knex');
  *
  * // assign your persistent storage connection...
- * PersistentEvent.setStore(conn);
+ * PersistentEvent.setStore(knex);
  *
  * // load all pending event from persistent storage...
- * PersistentEvent.loadAll$(function (err) {
- *   if (err) {
- *     throw new Error('failed to load all PersistentEvents: ' + err);
- *   }
+ * PersistentEvent.loadAll$();
  *
- *   // from this point on, all persistent events are loaded and running.
- * });
- *
+ * @param {string|Integer} [_id=-1]
+ * @param {string|Integer} uid
+ * @param {string|Integer} gid
  * @param {string|Date} when
  * @param {string} what
  * @param {array.<string>} [args=[]]
@@ -184,6 +181,7 @@ PersistentEvent.prototype.init = function (opts) {
     }
 
     // set defaults
+    oprts._id = opts._id || -1;
     opts.args = opts.args || [];
     opts.pending = opts.pending && true;
 
@@ -241,16 +239,16 @@ PersistentEvent.prototype.schedule = function () {
     }
 
     PersistentEvent.save$(self).then((result) => {
-        self._id = result[0];
+      if(self._id == -1) self._id = result[0];
 
-        self._event = scheduler.scheduleJob(self.when, function () {
-            handler(self.args, function (err, result) {
-                if (err) {
-                    console.error('event ' + self + ' failed:' + err);
-                }
-            // self.setComplete();
-            });
-        });
+      self._event = scheduler.scheduleJob(self.when, function () {
+          handler(self.args, function (err, result) {
+              if (err) {
+                  console.error('event ' + self + ' failed:' + err);
+              }
+          // self.setComplete();
+          });
+      });
     });
   };
 

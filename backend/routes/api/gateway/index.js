@@ -9,10 +9,10 @@ const io = (sock) => {
     const category = 'gateway';
 
     sock.on(`req/${category}/create`, async (req) => {
-        console.log('io-sensor/create');
+        console.log('io-gateway/create');
         console.log(req);
 
-        const rtn = await controller.create(req);
+        const rtn = await controller.create(req, sock.decoded);
         console.log(rtn);
 
         sock.emit(`res/${category}/create`,rtn);

@@ -23,16 +23,20 @@ exports.create = function(ipt) {
 }
 
 exports.getInfo = function(ipt) {
-    return knex(tbl.info).where('SID',ipt.sid).select()
+    return knex(tbl.info).where('SID', ipt.sid).select()
             .then((result) => {
                 const i = result[0];
 
                 return {
-                    tid         : i.TID,
-                    name        : i.name,
-                    period      : i.period,
-                    dashboard   : !!i.dashboard,
-                    chart       : !!i.chart,
+                    status: true,
+                    result: {
+                        gid         : i.GID,
+                        tid         : i.TID,
+                        name        : i.name,
+                        period      : i.period,
+                        dashboard   : !!i.dashboard,
+                        chart       : !!i.chart,
+                    },
                 };
             }).catch((err) => {
                 return {
@@ -99,6 +103,10 @@ exports.update = function (ltbl, ipt) {
         .then((result) => {
             return {
                 status: true,
+                data: {
+                    time: ipt.time,
+                    value: ipt.value,
+                },
             };
         })
         .catch((err) => {
