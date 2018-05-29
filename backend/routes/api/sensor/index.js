@@ -42,7 +42,7 @@ const client = (sock, sockets, io) => {
         const { gid, sid } = req;
         
         if (sockets[gid]) {
-            io.of('/gateway').to(sockets[gid]).emit(`123`, { sid: sid });
+            io.of('/gateway').to(sockets[gid]).emit(`req/${category}/refresh`, { sid: sid });
         }
     });
 
