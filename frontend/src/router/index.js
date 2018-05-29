@@ -48,7 +48,7 @@ const verifyJWTinRouter = (to, from, next) => {
 };
 
 export default new Router({
-  mode: 'history',
+  // mode: 'history',
   routes: [
     {
       path: '/',

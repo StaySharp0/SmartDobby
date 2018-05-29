@@ -82,7 +82,7 @@ export default {
         passwd_solution: this.passwd_solution,
       }).then((res) => {
         window.alert('회원가입을 축하드립니다.');
-        location.href = '/';
+        location.href = '#/';
         return res;
       }).catch((err) => {
         const res = err.response.data;

@@ -24,10 +24,10 @@
       </div></li>
       <!-- <li><a href="#!"><i class="material-icons">cloud</i>First Link With Icon</a></li> -->
       <!-- <li><a class="subheader">Subheader</a></li> -->
-      <li><a class="waves-effect" href="/">DashBoard</a></li>
-      <li><a class="waves-effect" href="/Remocon">Remocon</a></li>
-      <li><a class="waves-effect" href="/Scheduler">Scheduler</a></li>
-      <li><a class="waves-effect" href="/Mypage">MyPage</a></li>
+      <li><a class="waves-effect" href="#/" @click="pageMove">DashBoard</a></li>
+      <li><a class="waves-effect" href="#/Remocon" @click="pageMove">Remocon</a></li>
+      <li><a class="waves-effect" href="#/Scheduler" @click="pageMove">Scheduler</a></li>
+      <li><a class="waves-effect" href="#/Mypage" @click="pageMove">MyPage</a></li>
       <li><div class="divider"></div></li>
       <li><a @click="logout">Logout</a></li>
     </ul>
@@ -60,6 +60,7 @@ export default {
     return {
       email: '',
       name: '',
+      Sidenav: '',
     };
   },
   created() {
@@ -87,7 +88,7 @@ export default {
   },
   mounted() {
     const elem = document.querySelector('.sidenav');
-    window.M.Sidenav.init(elem, {});
+    this.Sidenav = window.M.Sidenav.init(elem, {});
   },
   methods: {
     logout() {
@@ -97,6 +98,9 @@ export default {
     },
     backPage() {
       history.back();
+    },
+    pageMove() {
+      this.Sidenav.close();
     },
   },
 };

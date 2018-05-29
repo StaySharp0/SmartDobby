@@ -18,7 +18,7 @@
             </div>
           </div>
           <div class="row">
-            <a href="signup" class="col s6 orange-text accent-2-text">Sign Up</a><br>
+            <a href="#/signup" class="col s6 orange-text accent-2-text">Sign Up</a><br>
             <!-- <a href="#" class="col s6 orange-text accent-2-text">Find Password</a><br> -->
           </div>
           <button type="submit" name="action"

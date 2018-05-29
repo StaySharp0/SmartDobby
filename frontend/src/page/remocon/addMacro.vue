@@ -7,7 +7,7 @@
         <div class="row" style="margin-top:20px">
           <div class="input-field col s12">
             <input placeholder="Macro Name" id="name" type="text" v-model="name">
-            <label for="name">Macro Name</label>
+            <label for="name" class="active">Macro Name</label>
           </div>
         </div>
         <div class="center">

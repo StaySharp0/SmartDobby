@@ -10,7 +10,7 @@
       </div>
       <div class="center">
         <a class="btn-floating btn-large waves-effect waves-light blur dropdown-trigger"
-           href='/Scheduler/Add'><i class="material-icons">add</i></a>
+           href='#/Scheduler/Add'><i class="material-icons">add</i></a>
       </div>
     </main>
   </div>

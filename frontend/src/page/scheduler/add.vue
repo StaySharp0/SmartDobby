@@ -7,7 +7,7 @@
         <div class="row" style="margin-top:20px">
           <div class="input-field col s12">
             <input placeholder="Scheduler Name" id="name" type="text" v-model="name">
-            <label for="name">Scheduler Name</label>
+            <label for="name" class="active">Scheduler Name</label>
           </div>
         </div>
       </div>
