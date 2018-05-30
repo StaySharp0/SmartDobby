@@ -55,11 +55,12 @@ export default {
         });
 
         localStorage.setItem('dobby', item);
+        if (window.smartDobby) window.smartDobby.sendToken(res.data.data);
         location.href = '/';
         return res;
       }).catch((err) => {
         const res = err.response.data;
-        window.alert(res.data.errMessage);
+        window.alert('잘못된 아이디와 비밀번호입니다.');
       });
     },
   },
