@@ -27,7 +27,7 @@ router.get('/mypage', async (req, res) => {
       result.link = false;
       if (val.length > 0){
         result.value    = val[0].value;
-        result.history  = mmnt(val.time).format("YYYY.MM.DD HH:mm:ss");
+        result.history  = mmnt(val[0].time).format("YYYY.MM.DD HH:mm:ss");
         result.link     = true;
       }
       
@@ -69,7 +69,7 @@ router.get('/dashboard', async (req, res) => {
       result.link = false;
       if (val.length > 0){
         result.value    = val[0].value;
-        result.history  = mmnt(val.time).format("YYYY.MM.DD HH:mm:ss");
+        result.history  = mmnt(val[0].time).format("YYYY.MM.DD HH:mm:ss");
         result.link     = true;
       }
       

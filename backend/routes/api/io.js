@@ -13,6 +13,7 @@ const authMiddleware = require('./middlewares/auth.js');
 const auth = require('./auth');
 const sensor = require('./sensor');
 const gateway = require('./gateway');
+const remocon = require('./remocon');
 const sockets = []
 
 const gatewayClient = io.of('/gateway');
@@ -35,16 +36,16 @@ gatewayClient.on('connection', function(sock) {
 const client = io.of('/client');
 client.on('connection', function(sock){
     console.log('init client');
-    gatewayClient.emit('123');
 
     sock.on('req/connection/init', (req) => {
-        console.log('io-connection-client/init');
-        console.log('req', req);
+        // console.log('io-connection-client/init');
+        // console.log('req', req);
 
         sock.join(req.token);
     });
     
     sensor.client(sock, sockets, io);
+    remocon.client(sock, sockets, io);
 });
 
 

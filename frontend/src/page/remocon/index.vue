@@ -13,7 +13,7 @@
            href='#' data-target='addNewRemocon'><i class="material-icons">add</i></a>
       </div>
       <ul id='addNewRemocon' class='dropdown-content'>
-        <li><a href="#!">새 리모컨</a></li>
+        <li><a href="#/Remocon/add">새 리모컨</a></li>
         <li><a href="#/Remocon/Macro/add">매크로</a></li>
       </ul>
     </div>

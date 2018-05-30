@@ -56,8 +56,16 @@ const client = (sock, sockets, io) => {
         sock.emit(`res/${category}/update/info/${sid}`,rtn);
 
         if(!_.isUndefined(req.period)){
-            io.of('/gateway').to(sockets[gid]).emit(`req/${category}/update/interval/${sid}`, {interval: req.period});
+            io.of('/gateway')
+                .to(sockets[gid])
+                .emit(`req/${category}/update/interval`, { sid: sid, interval: req.period});
         }
+        if(!_.isUndefined(req.name)) {
+            io.of('/gateway')
+                .to(sockets[gid])
+                .emit(`req/${category}/update/name`, { sid: sid, name: req.name });
+
+        }   
     });
 
 };

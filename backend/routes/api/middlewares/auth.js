@@ -26,7 +26,6 @@ exports.checkIO = async (socket, next) => {
 
     if (token) {
         socket.decoded = await verifyJWT(token, secret);
-        console.log(socket)
     }
     next();
 }
