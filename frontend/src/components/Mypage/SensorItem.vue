@@ -12,6 +12,9 @@
 </template>
 
 <script>
+import _ from 'lodash';
+import io from '@/router/io';
+
 export default {
   name: 'MyPage-Sensor-Item',
   props: {
@@ -22,11 +25,11 @@ export default {
           id: 0,
           type: 'temperature',
           name: '4층 PC실 중앙 온도계',
+          period: '5m',
+          dashboard: true,
+          chart: false,
           link: true,
           history: 'yy-mm-dd HH:MM',
-          mainView: true,
-          chartView: false,
-          period: '5m',
         };
       },
     },
@@ -48,6 +51,16 @@ export default {
     modalOpen() {
       this.eBus.$emit('SensorItemModalOpen', this.item);
     },
+    updateOk(item) {
+      this.item.name = item.name;
+      this.item.period = item.period;
+      this.item.dashboard = item.dashboard;
+      this.item.chart = item.chart;
+    },
+  },
+  created() {
+    const { sid } = this.item;
+    this.eBus.$on(`SensorInfoUpdateOK/${sid}`, this.updateOk);
   },
 };
 </script>

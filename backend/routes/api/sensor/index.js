@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const router = require('express').Router();
 const controller = require('./sensor.controller');
 const authMiddleware = require('../middlewares/auth');
@@ -43,6 +44,19 @@ const client = (sock, sockets, io) => {
         
         if (sockets[gid]) {
             io.of('/gateway').to(sockets[gid]).emit(`req/${category}/refresh`, { sid: sid });
+        }
+    });
+
+    sock.on(`req/${category}/update/info`, async (req) => {
+        console.log('io-sensor/update/info in client');
+        console.log(req);
+        const { gid, sid } = req;
+
+        const rtn = await controller.updateInfoIO(req);
+        sock.emit(`res/${category}/update/info/${sid}`,rtn);
+
+        if(!_.isUndefined(req.period)){
+            io.of('/gateway').to(sockets[gid]).emit(`req/${category}/update/interval/${sid}`, {interval: req.period});
         }
     });
 

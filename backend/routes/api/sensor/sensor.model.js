@@ -46,6 +46,22 @@ exports.getInfo = function(ipt) {
         });
 }
 
+exports.updateInfo = function(ipt) { 
+    return knex(tbl.info)
+        .where('SID', ipt.sid)
+        .update(_.omit(ipt,['sid']))
+        .then((result) => {
+            return {
+                status: true,
+            };
+        }).catch((err) => {
+            return {
+                status: false,
+                code: err.code,
+            };
+    });
+}
+
 exports.getInfoList = function(ipt){
     return knex(tbl.info)
             .column('SID',`${tbl.info}.GID`,`${tbl.info}.name`,{'type':`${tbl.type}.name`},'period','dashboard','chart','LogTableName')
@@ -116,6 +132,7 @@ exports.update = function (ltbl, ipt) {
             };
         });
 };
+
 
 exports.getCurrentValues = function(ltbl, ipt) {
     return knex(ltbl).where('SID',ipt.id).select().limit(10).orderBy('idx','desc');

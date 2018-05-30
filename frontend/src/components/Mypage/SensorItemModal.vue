@@ -7,13 +7,13 @@
           <input id="name" type="text" class="validate"
                  :placeholder="item.origin.name"
                  v-model="item.ipt.name">
-          <label for="name">sensor name</label>
+          <label for="name" class="active">sensor name</label>
         </div>
         <div class="input-field col m6 s12">
           <input id="ipt1" type="text" class="validate"
                  :placeholder="item.origin.period"
                  v-model="item.ipt.period">
-          <label for="ipt1">주기</label>
+          <label for="ipt1" class="active">주기</label>
         </div>
         <div class="input-field col m6 s6">
           <div class="switch input-field">
@@ -48,6 +48,7 @@
 
 <script>
 import _ from 'lodash';
+import io from '@/router/io';
 
 export default {
   name: 'mypage-sensor-item-modal',
@@ -59,17 +60,17 @@ export default {
   data() {
     return {
       instance: '',
+      resListener: '',
       item: {
         origin: {
-          id: 0,
-          name: '4층 PC실 중앙 온도계',
+          name: '',
+          period: '5m',
           dashboard: true,
           chart: false,
-          period: '5m',
         },
         ipt: {
-          name: '4층 PC실 중앙 온도계',
-          period: '5m',
+          name: '',
+          period: '',
           dashboard: true,
           chart: false,
         },
@@ -78,13 +79,36 @@ export default {
   },
   methods: {
     submit() {
+      const { sid } = this.item.origin;
+      const socket = io.getSocket();
+
+      let ipt = _.pick(this.item.origin, ['sid', 'gid']);
+      ipt = _.merge(ipt, _.omitBy(this.item.ipt, (v, k) => {
+        const valid = this.item.origin[k] === v;
+        return valid;
+      }));
+
+      if (socket) {
+        this.resListener = `res/sensor/update/info/${sid}`;
+        socket.on(this.resListener, this.resSubmit);
+        socket.emit('req/sensor/update/info', ipt);
+      }
     },
     open(item) {
       this.item.origin = _.clone(item);
       this.item.ipt = _.clone(item);
+
       this.$nextTick(() => {
         this.instance.open();
       });
+    },
+    resSubmit(res) {
+      const { sid } = this.item.origin;
+      this.resListener = '';
+
+      if (res.status) {
+        this.eBus.$emit(`SensorInfoUpdateOK/${sid}`, this.item.ipt);
+      }
     },
   },
   created() {

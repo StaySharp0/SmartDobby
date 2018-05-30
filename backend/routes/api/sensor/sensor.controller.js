@@ -119,8 +119,6 @@ exports.createIO = async (req) => {
 /*
     IO req/sensor/update
     {
-      { token },
-      gid: gateway ID,
       sid: sensor ID,
       { time },
       { value },
@@ -151,4 +149,21 @@ exports.updateIO = async (req) => {
   } else {
     return ApiRes(false, 'USU9000', '센서값 업데이트 실패');
   }
+}
+
+/*
+    IO req/sensor/info/update
+    {
+      { 'sid', 'name', 'period', 'chart', 'dashboard' }
+    }
+*/
+
+exports.updateInfoIO = async (req) => {
+  console.log('Api.io:sensorInfoUpdate');
+  console.log(req);
+
+  if(!_.isUndefined(req.chart)) req.chart = (req.chart) ? 1:0;
+  if(!_.isUndefined(req.dashboard)) req.dashboard = (req.dashboard) ? 1:0;
+
+  return await Sensor.updateInfo(req);
 }
