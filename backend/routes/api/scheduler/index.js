@@ -3,6 +3,7 @@ const controller = require('./scheduler.controller');
 const authMiddleware = require('../middlewares/auth');
 
 router.use('/', authMiddleware.check);
+router.get('/list', controller.list);
 router.post('/add', controller.create);
 
 const io = (sock) => {

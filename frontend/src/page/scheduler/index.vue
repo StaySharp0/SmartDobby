@@ -5,7 +5,8 @@
     <main>
       <div class="container">
         <div class="row" style="margin-top: 30px">
-          <a class="waves-effect waves-light btn btn-rounding">강의시간 전 5층 에어컨 동작</a>
+          <a class="waves-effect waves-light btn btn-rounding"
+              v-for="s in resSchedul" :key="s.idx">{{s.name}}</a>
         </div>
       </div>
       <div class="center">
@@ -22,15 +23,18 @@ import PageHeader from '@/components/Header';
 export default {
   name: 'page-Scheduler',
   data() {
-    return {};
+    return {
+      resSchedul: [],
+    };
   },
   components: {
     'page-header': PageHeader,
   },
   created() {
-    // this.$http.get('/api/scheduler/list')
-    //   .then((response) => {
-    //   });
+    this.$http.get('/api/scheduler/list')
+      .then((res) => {
+        this.resSchedul = res.data.data;
+      });
   },
 };
 </script>
@@ -41,7 +45,7 @@ export default {
     width: 100%;
     -webkit-box-shadow: none;
     box-shadow: none;
-    background-color: transparent;
+    background-color: transparent!important;
     color: #343434;
     cursor: pointer;
     border: 1px solid #343434;
@@ -50,7 +54,7 @@ export default {
     transition: background-color .2s;
   }
 
-  .btn-floating.blur{
+  .btn-floating.blur {
     background: rgba(233,233,233,.2);
   }
 

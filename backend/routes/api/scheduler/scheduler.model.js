@@ -8,10 +8,28 @@ scheduler.setStore(knex, 'Scheduler');
 scheduler.loadAll$();
 
 exports.create = (ipt) => {
-    return knex(tbl).insert(ipt)
+    let event = new scheduler(-1, ipt.name, ipt.UID, ipt.when, ipt.what, ipt.args, ipt.pending);
+
+    return scheduler.save$(event)
+        .then((result) => {
+            event.schedule();
+            return {
+                status: true,
+            };
+        }).catch((err) => {
+            return {
+                status: false,
+                code: err.code,
+            };
+    });
+};
+
+exports.list = (ipt) => {
+    return knex(tbl).where('UID', ipt.UID).select()
         .then((result) => {
             return {
                 status: true,
+                result: result,
             };
         }).catch((err) => {
             return {

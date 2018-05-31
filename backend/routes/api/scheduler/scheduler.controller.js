@@ -4,7 +4,7 @@ const Scheduler = require('./scheduler.model');
 
 exports.create = async (req, res) => {
     console.log('Api:schedulerAdd');
-    console.log('body',req.body);
+    // console.log('body',req.body);
 
     const ipt = {
         UID: req.decoded._id,
@@ -19,8 +19,25 @@ exports.create = async (req, res) => {
     const create = await Scheduler.create(ipt);
     
     if(create.status) {
-        res.status(200).json(ApiRes(true, 'USH0000', '스케줄러 등록 성공'));
+        res.status(200).json(ApiRes(true, 'USHA0000', '스케줄러 등록 성공'));
     } else {
-        res.status(400).json(ApiRes(false, 'USH9000', '스케줄러 등록 실패'));
+        res.status(400).json(ApiRes(false, 'USHA9000', '스케줄러 등록 실패'));
+    } 
+}
+
+exports.list = async (req, res) => {
+    console.log('Api:schedulerList');
+    // console.log('body',req.body);
+
+    const ipt = {
+        UID: req.decoded._id,
+    };
+
+    const list = await Scheduler.list(ipt);
+    
+    if(list.status) {
+        res.status(200).json(ApiRes(true, 'USHL0000', '스케줄러 리스트 조회 성공', list.result));
+    } else {
+        res.status(400).json(ApiRes(false, 'USHL9000', '스케줄러 리스트 조회 실패'));
     } 
 }

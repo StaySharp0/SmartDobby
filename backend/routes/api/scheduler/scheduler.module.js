@@ -17,8 +17,8 @@ const _ = require('lodash');
  * PersistentEvent.loadAll$();
  *
  * @param {string|Integer} [_id=-1]
+ * @param {string|Integer} name
  * @param {string|Integer} uid
- * @param {string|Integer} gid
  * @param {string|Date} when
  * @param {string} what
  * @param {array.<string>} [args=[]]
@@ -31,12 +31,12 @@ const _ = require('lodash');
  *
  * @constructor
  */
-let PersistentEvent = function (id, uid, gid, when, what, args, pending) {
+let PersistentEvent = function (id, name, uid, when, what, args, pending) {
     // initialize
     PersistentEvent.Cache.push(this.init({
         _id : id,
+        name: name,
         uid : uid,
-        gid : gid,
         when: when,
         what: what,
         args: args,
@@ -62,32 +62,21 @@ let PersistentEvent = function (id, uid, gid, when, what, args, pending) {
    */
 
   PersistentEvent.Actions = {
-    doSomething: function (args, cb) {
+    nomal: function (args, cb) {
+      console.log('nomal');
       // defaults
       args = args || [];
+      // console.log(args);
 
-      // TODO check specific args here ...
+      // // TODO check specific args here ...
 
-      var result = true,
-          err = null;
+      // var result = true,
+      //     err = null;
 
-      // do your action here, possibly with passed args
+      // // do your action here, possibly with passed args
 
-      cb(err, result);
+      // cb(err, result);
     },
-    doSomethingElse: function (args, cb) {
-      // defaults
-      args = args || [];
-
-      // TODO check specific args here ...
-
-      var result = true,
-          err = null;
-
-      // do your action here, possibly with passed args
-
-      cb(err, result);
-    }
   };
 
 /**
@@ -131,14 +120,17 @@ PersistentEvent.save$ = function (event) {
     if (null === conn) {
       throw new Error('requires a StorageConnection');
     }
+    console.log(event)
 
     return conn(PersistentEvent.Table).insert({
         UID : event.uid,
-        GID : event.gid,
+        name : event.name,
         when : event.when, 
         what : event.what, 
-        args : event.args, 
-        pending : (event.pending) ? 1 : 0,
+        args : JSON.stringify(event.args),
+        pending : 1,
+    }).then((result) => {
+      this._id = result[0];
     });
 };
 
@@ -155,11 +147,11 @@ PersistentEvent.loadAll$ = function () {
     }
 
     conn(PersistentEvent.Table).where('pending',1).then((result) => {
-        _.forEach((s) => {
-            let pending = (result.pending) ? true : false;
-            let event = new PersistentEvent(result.idx, result.UID, result.GID, result.when, result.what, result.args, pending);
-            event.schedule();
-        });
+      _.forEach(result, (s) => {
+        let pending = (s.pending) ? true : false;
+        let event = new PersistentEvent(s.idx, s.name, s.UID, s.when, s.what, s.args, pending);
+        event.schedule();
+      });
     });
     console.log('init: Scheduler load');
 };
@@ -181,20 +173,18 @@ PersistentEvent.prototype.init = function (opts) {
     }
 
     // set defaults
-    oprts._id = opts._id || -1;
-    opts.args = opts.args || [];
+    opts._id = opts._id || -1;
+    opts.name = opts.name;
+    opts.uid = opts.uid;
+    opts.args = JSON.parse(opts.args) || [];
     opts.pending = opts.pending && true;
-
-    // convert string to Date, if required
-    if ('string' === typeof opts.when) {
-      opts.when = new Date(opts.when);
-    }
 
     // check that opts contains needed properties
     if (!opts.when instanceof Date) {
       throw new Error('when must be a string representation of a Date or a Date object');
     }
 
+    console.log(opts.what)
     if ('string' !== typeof opts.what) {
       throw new Error('what must be a string containing an action name');
     }
@@ -211,7 +201,7 @@ PersistentEvent.prototype.init = function (opts) {
     var self = this;
     Object.keys(opts).forEach(function (key) {
       if (opts.hasOwnProperty(key)) {
-        self = opts[key];
+        self[key] = opts[key];
       }
     });
 
@@ -232,22 +222,18 @@ PersistentEvent.prototype.toString = function () {
   */
 PersistentEvent.prototype.schedule = function () {
     var self = this,
-        handler = Actions[this.what];
+        handler = PersistentEvent.Actions[this.what];
 
     if ('function' !== typeof handler) {
       throw new Error('no handler found for action:' + this.what);
     }
 
-    PersistentEvent.save$(self).then((result) => {
-      if(self._id == -1) self._id = result[0];
-
-      self._event = scheduler.scheduleJob(self.when, function () {
-          handler(self.args, function (err, result) {
-              if (err) {
-                  console.error('event ' + self + ' failed:' + err);
-              }
-          // self.setComplete();
-          });
+    self._event = scheduler.scheduleJob(self.when, function () {
+      handler(self.args, function (err, result) {
+        if (err) {
+            console.error('event ' + self + ' failed:' + err);
+        }
+      // self.setComplete();
       });
     });
   };
