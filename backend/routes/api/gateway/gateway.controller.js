@@ -59,3 +59,31 @@ exports.list = async (req, res) => {
     return res.status(400).json(ApiRes(false, 'UG9000', '게이트웨이 정보리스트 조회 실패'));
   }
 }
+
+/*
+    post /api/gateway/name
+    {
+      gid, name
+    }
+*/
+exports.updateName = async (req, res) => {
+  console.log('Api:updateGatewayName');
+  // console.log(req.body);
+
+  const ipt = {
+    gid: req.body.gid,
+    name: req.body.name,
+  };
+
+  const update = await Gateway.updateName(ipt);
+
+  console.log(update);
+  if(update.status){
+    return res.status(200).json(ApiRes(true, 'UGUN0000', '유저 게이트웨이 이름 변경 성공'));
+  } else {
+    return res.status(200).json(ApiRes(false, 'UGUN9000', '유저 게이트웨이 이름 변경 실패', {
+      errMessage: User.errCode[create.code],
+    }));
+  }
+  
+}

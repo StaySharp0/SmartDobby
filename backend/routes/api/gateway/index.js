@@ -3,7 +3,8 @@ const controller = require('./gateway.controller');
 const authMiddleware = require('../middlewares/auth');
 
 router.use('/', authMiddleware.check);
-router.get('/list',controller.list);
+router.get('/list', controller.list);
+router.post('/name', controller.updateName);
 
 const io = (sock) => {
     const category = 'gateway';

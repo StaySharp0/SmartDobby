@@ -22,3 +22,19 @@ exports.createGateway = function (ipt) {
 exports.getList = function(ipt) {
     return knex(tbl).where('UID',ipt.uid).select();
 }
+
+exports.updateName = function(ipt){
+  return knex(tbl).where('GID', ipt.gid)
+    .update(_.omit(ipt,['gid']))
+    .then((result) => {
+      return {
+          status: true,
+      };
+    }).catch((err) => {
+      return {
+          status: false,
+          code: err.code,
+      };
+});
+    
+}
