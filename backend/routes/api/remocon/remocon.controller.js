@@ -92,8 +92,14 @@ exports.addMacro = async (req, res) => {
     macro: req.body.macro,
   };
   
-  const create = await Remocon.addMacroRemocon(ipt);
-  
+  let create = await Remocon.addMacroRemocon(ipt);
+  create = await Remocon.addUserRemocon({
+    UID: req.decoded._id,
+    GID: 1,
+    RID: create.result,
+    name: ipt.name,
+  });
+
   if(create.status){
     return res.status(200).json(ApiRes(true, 'URAM0000', '매크로 리모컨 등록 성공'));
   } else {

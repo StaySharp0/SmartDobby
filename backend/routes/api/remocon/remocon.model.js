@@ -65,6 +65,7 @@ exports.addMacroRemocon = function(ipt) {
         .then((result) => {
             return {
                 status: true,
+                result: result[0],
             };
         }).catch((err) => {
             return {
