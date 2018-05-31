@@ -65,7 +65,7 @@ exports.list = async (req, res) => {
       result.link = false;
       if (val.length > 0){
         result.value    = val[0].value;
-        result.history  = mmnt(val.time).format("YYYY.MM.DD HH:mm:ss");
+        result.history  = mmnt(val[0].time).format("YYYY.MM.DD HH:mm:ss");
         result.link     = true;
       }
       
@@ -76,6 +76,45 @@ exports.list = async (req, res) => {
   } catch (e) {
     console.log(e)
     return res.status(400).json(ApiRes(false, 'USU9000', '센서 정보리스트 조회 실패'));
+  }
+}
+
+/*
+    POST /api/sensor/chart
+    {
+      token,
+      sid,
+    }
+*/
+exports.getChartData = async (req, res) => {
+  console.log('Api:sensorChartData');
+  //console.log('body',req.body);
+  
+  const ipt = {
+    sid: req.query.sid
+  };
+
+  let info = await Sensor.getInfo(ipt);
+  if(!info.status) return res.status(400).json(ApiRes(false, 'USC9000', '센서 차트값 조회 실패'));
+  else info = info.result;
+
+  let tbl = await Sensor.findLogTable(info);
+  if(!tbl.status) return res.status(400).json(ApiRes(false, 'USC9000', '센서 차트값 조회 실패'));
+  else tbl = tbl.result;
+
+  try {
+    const list = await Sensor.getCurrentValues(tbl, {id: ipt.sid});
+    
+    const rtn = _.map(list, (c) => {
+      return {
+        time: mmnt(c.time).format("YYYY.MM.DD HH:mm:ss"),
+        value: c.value,
+      };
+    });
+    
+    return res.status(200).json(ApiRes(true, 'USC0000', '센서 차트값 조회 성공', rtn));
+  } catch (e) { 
+    return res.status(400).json(ApiRes(false, 'USC0000', '센서 차트값 조회 실패'));
   }
 }
 
