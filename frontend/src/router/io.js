@@ -11,9 +11,11 @@ const io = {
     console.log('sockek.io init!');
 
     socket.emit('req/connection/init', { token });
+    socket.off('reconnect');
     socket.on('reconnect', () => {
       socket.emit('req/connection/init', { token });
     });
+    socket.off('toastSchedule');
     socket.on('toastSchedule', (schedule) => {
       window.M.toast({ displayLength: 3000, html: `Run Schedule(${schedule.name})` });
     });
