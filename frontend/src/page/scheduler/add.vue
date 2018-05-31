@@ -9,46 +9,47 @@
             <input placeholder="Scheduler Name" id="name" type="text" v-model="name">
             <label for="name" class="active">Scheduler Name</label>
           </div>
+          <div class="input-field col s12">
+            <input placeholder="Cron-style Time" id="time" type="text" v-model="time">
+            <label for="time" class="active">Time (s m h D M W)</label>
+          </div>
         </div>
       </div>
       <div class="center" v-show="!viewSubmit">
         <a class="btn-floating btn-large waves-effect waves-light blur dropdown-trigger"
-           href='#!' data-target='addSchedulerSetting'><i class="material-icons">add</i></a>
+          data-target='addSchedulerSetting'><i class="material-icons">add</i></a>
       </div>
       <div class="center" v-show="viewSubmit">
         <a class="btn-floating btn-large waves-effect waves-light blur"
-           href='#!'><i class="material-icons">send</i></a>
+           @click="Submit"><i class="material-icons">send</i></a>
       </div>
       <ul id='addSchedulerSetting' class='dropdown-content'>
         <li v-show="viewTrigger">
-          <a href="#!" @click="AddSensorList">Sensor</a>
-        </li>
-        <li v-show="viewTrigger">
-          <a href="#!" @click="AddTime">Time</a>
+          <a @click="AddSensorList">Sensor</a>
         </li>
         <li v-show="viewSensorCondition">
-          <a href="#!" @click="AddConditionValue('>')">&gt;</a>
+          <a @click="AddConditionValue('>')">&gt;</a>
           </li>
         <li v-show="viewSensorCondition">
-          <a href="#!" @click="AddConditionValue('>=')">&gt;=</a>
+          <a @click="AddConditionValue('>=')">&gt;=</a>
         </li>
         <li v-show="viewSensorCondition">
-          <a href="#!" @click="AddConditionValue('=')">=</a>
+          <a @click="AddConditionValue('=')">=</a>
         </li>
         <li v-show="viewSensorCondition">
-          <a href="#!" @click="AddConditionValue('<')">&lt;</a>
+          <a @click="AddConditionValue('<')">&lt;</a>
         </li>
         <li v-show="viewSensorCondition">
-          <a href="#!" @click="AddConditionValue('<=')">&lt;=</a>
+          <a @click="AddConditionValue('<=')">&lt;=</a>
         </li>
         <li v-show="viewChain">
-          <a href="#!" @click="AddChain('AND')">AND</a>
+          <a @click="AddChain('AND')">AND</a>
         </li>
         <li v-show="viewChain">
-          <a href="#!" @click="AddChain('OR')">OR</a>
+          <a @click="AddChain('OR')">OR</a>
         </li>
         <li v-show="viewAction">
-          <a href="#!" @click="AddActionList">Action</a>
+          <a @click="AddActionList">Action</a>
         </li>
       </ul>
     </main>
@@ -57,6 +58,7 @@
 
 <script>
 import Vue from 'vue';
+import _ from 'lodash';
 import PageHeader from '@/components/Header';
 import SensorList from '@/components/Scheduler/SensorList';
 import SensorInput from '@/components/Scheduler/Input';
@@ -76,9 +78,10 @@ export default {
       viewTrigger: true,
       viewSensorCondition: false,
       viewChain: false,
-      viewAction: false,
+      viewAction: true,
       scheduler: [],
       name: '',
+      time: '',
     };
   },
   components: {
@@ -99,26 +102,6 @@ export default {
       this.viewSensorCondition = true;
       this.viewChain = false;
       this.viewAction = false;
-    },
-    AddTime() {
-      const instance = new SensorInputClass({
-        propsData: {
-          placeholder: 'Time',
-          cond: 'time',
-        },
-      });
-      instance.$mount();
-      this.$refs.container.appendChild(instance.$el);
-
-      this.scheduler.push({
-        type: 'time',
-        item: instance,
-      });
-
-      this.viewTrigger = false;
-      this.viewSensorCondition = false;
-      this.viewChain = true;
-      this.viewAction = true;
     },
     AddConditionValue(type) {
       const instance = new SensorInputClass({
@@ -174,16 +157,41 @@ export default {
       this.viewSubmit = true;
     },
     Submit() {
-    // this.$http.get('/api/scheduler/add')
-    //   .then((response) => {
-    //     const res = response.data;
-    //     this.gateways = res.data;
-
-    //     Vue.nextTick(() => {
-    //       const elems = document.querySelectorAll('select');
-    //       const instances = window.M.FormSelect.init(elems, {});
-    //     });
-    //   });
+      const params = _.map(this.scheduler, (s) => {
+        switch (s.type) {
+          case 'sensor':
+            return {
+              type: s.type,
+              sid: s.item.selected,
+            };
+          case 'value':
+            return {
+              type: s.type,
+              cond: s.cond,
+              value: s.item.value,
+            };
+          case 'action':
+            return {
+              type: s.type,
+              rid: s.item.selected,
+            };
+          case 'chain':
+            return {
+              type: s.type,
+              chain: s.chain,
+            };
+          default:
+            return null;
+        }
+      });
+      this.$http.post('/api/scheduler/add', {
+        name: this.name,
+        time: this.time,
+        params,
+      }).then((res) => {
+        alert('스케줄러 등록 성공');
+        window.location.href = '#/Scheduler';
+      });
     },
   },
   mounted() {

@@ -3,7 +3,7 @@
     <div class="input-field col s12">
       <select v-model="selected">
         <optgroup v-for="g in gateways" :key="g.id" :label="g.name">
-          <option v-for="s in g.sensor" :key="s._id" :value="s._id">{{s.name}}</option>
+          <option v-for="s in g.sensor" :key="s.sid" :value="s.sid">{{s.name}}</option>
         </optgroup>
       </select>
       <label>Sensor</label>

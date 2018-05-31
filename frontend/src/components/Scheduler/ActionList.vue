@@ -1,21 +1,8 @@
  <template>
   <div class="row" style="margin-bottom:0">
     <div class="input-field col s12">
-      <!-- <select v-model="selected">
-        <optgroup v-for="g in gateways" :key="g.id" :label="g.name">
-          <option v-for="s in g.sensor" :key="s._id" :value="s._id">{{s.name}}</option>
-        </optgroup>
-      </select>
-      <label>Sensor</label> -->
-      <select class="action-list">
-        <optgroup label="테스트 건물">
-            <option value="1">Option 1 </option>
-            <option value="2">Option 2</option>
-        </optgroup>
-        <optgroup label="테스트 건물">
-            <option value="3">Option 3</option>
-            <option value="4">Option 4</option>
-        </optgroup>
+      <select v-model="selected">
+        <option v-for="r in remocon" :key="r.rid" :value="r.rid">{{r.name}}</option>
       </select>
       <label>Action</label>
     </div>
@@ -30,20 +17,19 @@ export default {
   data() {
     return {
       selected: '',
-      gateways: [],
+      remocon: [],
     };
   },
   created() {
-    // this.$http.get('/api/page/dashboard')
-    //   .then((response) => {
-    //     const res = response.data;
-    //     this.gateways = res.data;
+    this.$http.get('/api/remocon/list')
+      .then((res) => {
+        this.remocon = res.data.data;
 
-    //     Vue.nextTick(() => {
-    //       const elems = document.querySelectorAll('select');
-    //       const instances = window.M.FormSelect.init(elems, {});
-    //     });
-    //   });
+        Vue.nextTick(() => {
+          const elems = document.querySelectorAll('select');
+          const instances = window.M.FormSelect.init(elems, {});
+        });
+      });
   },
   mounted() {
     Vue.nextTick(() => {
