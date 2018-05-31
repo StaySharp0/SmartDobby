@@ -14,7 +14,7 @@
         </div>
         <div class="row" style="margin:0">
           <div class="data-value">
-            <div class="value">{{item.value}}</div>
+            <div class="value">{{item.value}}{{unitString}}</div>
           </div>
           <div class="data-script"><br>
             <div>{{item.name}}</div><br>
@@ -56,6 +56,16 @@ export default {
     return {
       updateListenr: '',
     };
+  },
+  computed: {
+    unitString() {
+      const iconClass = {
+        temperature: '°C',
+        humidity: '%',
+      };
+
+      return iconClass[this.item.type];
+    },
   },
   methods: {
     refresh() {
