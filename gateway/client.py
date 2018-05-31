@@ -5,7 +5,7 @@ import os, sys, json
 
 class MainClient:
 	def __init__(self, token):
-		self.APIServer = '192.168.0.244'
+		self.APIServer = '13.209.66.217'
 		self.port = 3000
 		self.Sensor = Sensor(self)
 		self.token = token
@@ -39,6 +39,7 @@ class MainClient:
 			self.SocketIO.wait()
 
 	def _setOnListener(self):
+		self.Socket.on('reconnect', self._on_reconnect)
 		self.Socket.on('res/gateway/create', self._on_setGid)
 		self.Socket.on('res/sensor/create', self._on_setSID)
 		self.Socket.on('req/sensor/refresh', self._on_refreshSensor)
@@ -46,6 +47,10 @@ class MainClient:
 		self.Socket.on('req/sensor/update/interval', self._on_setSensorInterval)
 		self.Socket.on('req/remocon/learn', self._on_getIRSerial)
 		self.Socket.on('req/remocon/learn/OK', self._on_updateIRSerial)
+
+	def _on_reconnect(self):
+		print('reconnect')
+		self._emit_notifyGid()
 
 	def _on_setGid(self, obj):
 		if obj['status'] is True:
