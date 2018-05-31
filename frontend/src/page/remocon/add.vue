@@ -20,16 +20,21 @@
             <label for="model" class="active">Model Name</label>
           </div>
         </div>
-        <div class="center">
+        <div class="center" v-show="viewAdd">
           <a class="btn-floating btn-large waves-effect waves-light blur dropdown-trigger"
             href='#!' data-target='addMacroRemocon'><i class="material-icons">add</i></a>
         </div>
+        <div class="center" v-show="viewSubmit">
+          <a class="btn-floating btn-large waves-effect waves-light blur"
+            @click="submitSearchButton"><i class="material-icons">send</i></a>
+        </div>
         <ul id='addMacroRemocon' class='dropdown-content'>
-          <li><a @click="searchRemocon">Search</a></li>
+          <li><a @click="modalOpen">Search</a></li>
           <li><a @click="learnRemocon">Learn</a></li>
-          <li><a @click="Submit">Submit</a></li>
+          <!-- <li><a @click="Submit">Submit</a></li> -->
         </ul>
       </div>
+      <serch-modal :eBus="eBus"/>
     </main>
   </div>
 </template>
@@ -37,34 +42,59 @@
 <script>
 import Vue from 'vue';
 import PageHeader from '@/components/Header';
+import Modal from '@/components/Remocon/RemoconListModal';
 import io from '@/router/io';
+
+const EventBus = new Vue();
 
 export default {
   name: 'page-Remocon-Add',
   components: {
     'page-header': PageHeader,
+    'serch-modal': Modal,
   },
   data() {
     return {
+      eBus: EventBus,
       gateways: [],
       resLearnListener: '',
       resTestListener: '',
       gid: '',
+      rid: -1,
       name: '',
       model: '',
+
+      viewAdd: true,
+      viewSubmit: false,
     };
   },
   methods: {
-    searchRemocon() {
+    selectedSearchRemocon(item) {
+      this.rid = item.rid;
+      this.model = item.model;
+      this.viewAdd = false;
+      this.viewSubmit = true;
     },
     learnRemocon() {
       const socket = io.getSocket();
 
-      this.resLearnListener = `res/remocon/update/info/${sid}`;
-      // socket.on(this.resListener, this.resSubmit);
+      // this.resLearnListener = `res/remocon/update/info/${sid}`;
+      // // socket.on(this.resListener, this.resSubmit);
       socket.emit('req/remocon/learn', { gid: this.gid });
     },
-    Submit() {
+    submitSearchButton() {
+      console.log('submitSearchButton', { gid: this.gid, rid: this.rid, name: this.name });
+
+      this.$http.post('/api/remocon/add/legacy', {
+        gid: this.gid,
+        rid: this.rid,
+        name: this.name,
+      }).then((res) => {
+        window.location.href = '#/Remocon';
+      });
+    },
+    modalOpen() {
+      this.eBus.$emit('RemoconListModalOpen', this.item);
     },
   },
   created() {
@@ -78,6 +108,8 @@ export default {
           const instances = window.M.FormSelect.init(elems, {});
         });
       });
+
+    this.eBus.$on('selecteRemoconList', this.selectedSearchRemocon);
   },
   mounted() {
     const elems = document.querySelectorAll('.dropdown-trigger');

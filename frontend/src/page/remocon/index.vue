@@ -5,8 +5,11 @@
     <main>
       <div class="container">
         <div class="row" style="margin-top: 30px">
-          <a class="waves-effect waves-light btn btn-rounding">4층 에어컨 전원 버튼</a>
-          <a class="waves-effect waves-light btn btn-rounding">5층 에어컨 전원 버튼</a>
+          <a class="waves-effect waves-light btn btn-rounding"
+            v-for="r in resURList" :key="r.rid"
+            @click="runRemocon(r)">
+            {{r.name}}
+          </a>
       </div>
       <div class="center">
         <a class="btn-floating btn-large waves-effect waves-light blur dropdown-trigger"
@@ -27,10 +30,23 @@ import PageHeader from '@/components/Header';
 export default {
   name: 'page-Remocon',
   data() {
-    return {};
+    return {
+      resURList: [],
+    };
   },
   components: {
     'page-header': PageHeader,
+  },
+  methods: {
+    runRemocon(r) {
+      console.log(r);
+    },
+  },
+  created() {
+    this.$http.get('/api/remocon/list')
+      .then((res) => {
+        this.resURList = res.data.data;
+      });
   },
   mounted() {
     const elems = document.querySelectorAll('.dropdown-trigger');

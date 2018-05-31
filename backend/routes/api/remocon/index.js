@@ -1,11 +1,16 @@
 const _ = require('lodash');
 const router = require('express').Router();
-// const controller = require('./sensor.controller');
+const controller = require('./remocon.controller');
 const authMiddleware = require('../middlewares/auth');
 
 router.use('/', authMiddleware.check);
+router.get('/list', controller.userList);
+router.get('/signal/list', controller.signalList);
+
+router.post('/add/legacy', controller.addLegacy);
+// router.post('/add/learn', controller.addLearn);
 // router.post('/update', controller.update);
-// router.get('/list', controller.list);
+
 
 const category = 'remocon';
 
