@@ -6,12 +6,12 @@
         <h3 class="col s12" v-show="!g.viewGatewayEdit">
         {{g.name}}
         <i class="material-icons blue-grey-text text-darken-2"
-          @click="g.viewGatewayEdit = !g.viewGatewayEdit">edit</i>
+          @click="editOpen(g)">edit</i>
         </h3>
         <div class="input-field  col s11" style="margin-top: 25px; margin-bottom: 0"
           v-show="g.viewGatewayEdit" >
           <input id="name" type="text" class="validate"
-                 :placeholder="g.name" :value="editGatewayName" />
+                 :placeholder="g.name" v-model="editGatewayName" />
           <label for="name" class="active">gateway name</label>
           <i class="btn-editSubmit material-icons blue-grey-text text-darken-2"
             v-show="g.viewGatewayEdit" @click="updateGatewayName(g)">edit</i>
@@ -64,9 +64,14 @@ export default {
     'sensor-item-modal': ItemModal,
   },
   methods: {
+    editOpen(g) {
+      const gateway = g;
+      this.editGatewayName = gateway.name;
+      gateway.viewGatewayEdit = true;
+    },
     updateGatewayName(g) {
       const gateway = g;
-
+      console.log(this.editGatewayName);
       this.$http.post('/api/gateway/name', {
         gid: gateway.id,
         name: this.editGatewayName,
