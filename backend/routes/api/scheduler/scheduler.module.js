@@ -2,6 +2,7 @@
 
 const scheduler = require('node-schedule');
 const _ = require('lodash');
+const io = require('../io');
 
 /**
  * Storable Representation of a Scheduled Event
@@ -62,20 +63,10 @@ let PersistentEvent = function (id, name, uid, when, what, args, pending) {
    */
 
   PersistentEvent.Actions = {
-    nomal: function (args, cb) {
-      console.log('nomal');
+    nomal: function (uid, name, args, cb) {
       // defaults
       args = args || [];
-      // console.log(args);
-
-      // // TODO check specific args here ...
-
-      // var result = true,
-      //     err = null;
-
-      // // do your action here, possibly with passed args
-
-      // cb(err, result);
+      io.of('/client').to(uid).emit('toastSchedule', { name, args });
     },
   };
 
@@ -120,7 +111,6 @@ PersistentEvent.save$ = function (event) {
     if (null === conn) {
       throw new Error('requires a StorageConnection');
     }
-    console.log(event)
 
     return conn(PersistentEvent.Table).insert({
         UID : event.uid,
@@ -184,7 +174,6 @@ PersistentEvent.prototype.init = function (opts) {
       throw new Error('when must be a string representation of a Date or a Date object');
     }
 
-    console.log(opts.what)
     if ('string' !== typeof opts.what) {
       throw new Error('what must be a string containing an action name');
     }
@@ -229,7 +218,7 @@ PersistentEvent.prototype.schedule = function () {
     }
 
     self._event = scheduler.scheduleJob(self.when, function () {
-      handler(self.args, function (err, result) {
+      handler(self.uid, self.name, self.args, function (err, result) {
         if (err) {
             console.error('event ' + self + ' failed:' + err);
         }

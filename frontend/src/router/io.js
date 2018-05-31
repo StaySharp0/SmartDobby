@@ -1,6 +1,6 @@
 import socketIo from 'socket.io-client';
 
-const socket = socketIo('http://localhost:3000/client');
+const socket = socketIo('http://13.209.66.217:3000/client');
 const io = {
   isInit: false,
   getSocket: () => {
@@ -13,6 +13,9 @@ const io = {
     socket.emit('req/connection/init', { token });
     socket.on('reconnect', () => {
       socket.emit('req/connection/init', { token });
+    });
+    socket.on('toastSchedule', (schedule) => {
+      window.M.toast({ displayLength: 3000, html: `Run Schedule(${schedule.name})` });
     });
 
     this.isInit = true;
