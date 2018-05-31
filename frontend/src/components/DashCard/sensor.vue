@@ -29,6 +29,7 @@
 <script>
 import io from '@/router/io';
 import Vue from 'vue';
+import { updateLocale } from 'moment';
 
 export default {
   name: 'card-sensor',
@@ -53,7 +54,7 @@ export default {
   },
   data() {
     return {
-      sensorListener: '',
+      updateListenr: '',
     };
   },
   methods: {
@@ -66,25 +67,22 @@ export default {
       }
     },
   },
-  mounted() {
+  created() {
     const { gid, sid } = this.item;
     const socket = io.getSocket();
 
-    if (socket) {
-      const sensorListener = `res/sensor/refresh/${gid}/${sid}`;
-
-      socket.on(sensorListener, (res) => {
-        this.item.value = res.value;
-        this.item.history = res.history;
-      });
-      this.sensorListener = sensorListener;
-    }
+    const updateListenr = `res/sensor/update/${sid}`;
+    socket.on(updateListenr, (res) => {
+      this.item.value = res.value;
+      this.item.history = res.time;
+    });
+    this.updateListenr = updateListenr;
   },
   destroyed() {
     const socket = io.getSocket();
 
     if (socket) {
-      socket.off(this.sensorListener);
+      socket.off(this.updateListenr);
     }
   },
 };

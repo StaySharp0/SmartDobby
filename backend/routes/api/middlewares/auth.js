@@ -20,6 +20,12 @@ const verifyJWT = (token, secret) => {
     });
 };
 
+exports.verifyIO = async (token) => {
+    const secret = config.secret;
+
+    return await verifyJWT(token, secret);
+}
+
 exports.checkIO = async (socket, next) => {
     const token = socket.request.headers['x-access-token'];
     const secret = config.secret;

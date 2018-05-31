@@ -28,20 +28,21 @@ gatewayClient.on('connection', function(sock) {
         sockets[req.gid] = sock.id;
     });
 
-    auth.io(sock, sockets);
-    sensor.gateway(sock, sockets);
-    gateway.io(sock, sockets);
+    auth.io(sock, sockets, io);
+    sensor.gateway(sock, sockets, io);
+    gateway.io(sock, sockets, io);
 });
 
 const client = io.of('/client');
 client.on('connection', function(sock){
     console.log('init client');
 
-    sock.on('req/connection/init', (req) => {
-        // console.log('io-connection-client/init');
+    sock.on('req/connection/init', async (req) => {
+        console.log('io-connection-client/init');
         // console.log('req', req);
+        const info = await authMiddleware.verifyIO(req.token);
 
-        sock.join(req.token);
+        sock.join(info._id);
     });
     
     sensor.client(sock, sockets, io);

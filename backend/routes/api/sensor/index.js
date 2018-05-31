@@ -9,7 +9,7 @@ router.get('/list', controller.list);
 
 const category = 'sensor';
 
-const gateway = (sock, sockets) => {
+const gateway = (sock, sockets, io) => {
     
     sock.on(`req/${category}/create`, async (req) => {
         console.log('io-sensor/create');
@@ -23,15 +23,11 @@ const gateway = (sock, sockets) => {
 
     sock.on(`req/${category}/update`, async (req) => {
         console.log('io-sensor/update');
-        console.log(req);
-        const { token, gid, sid } = req;
+        // console.log(req);
+        const { token, sid } = req;
 
         const rtn = await controller.updateIO(req);
-        console.log(rtn)
-
-        if (sockets[token]) {
-            sockets[token].emit(`res/${category}/refresh/${gid}/${sid}`, rtn);
-        }
+        io.of('/client').to(sock.decoded._id).emit(`res/${category}/update/${sid}`, req);
     });
 };
 

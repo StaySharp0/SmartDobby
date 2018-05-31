@@ -8,7 +8,13 @@ const io = {
     return null;
   },
   init: (token) => {
+    console.log('sockek.io init!');
+
     socket.emit('req/connection/init', { token });
+    socket.on('reconnect', () => {
+      socket.emit('req/connection/init', { token });
+    });
+
     this.isInit = true;
   },
 };

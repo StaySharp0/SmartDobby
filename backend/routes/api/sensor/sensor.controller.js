@@ -126,7 +126,7 @@ exports.createIO = async (req) => {
 */
 exports.updateIO = async (req) => {
   console.log('Api.io:sensorUpdate');
-  console.log(req);
+  // console.log(req);
 
   const ipt = {
     sid: req.sid,
