@@ -63,7 +63,7 @@ export default {
     this.$http.get(`/api/sensor/chart?sid=${this.item.sid}`)
       .then((response) => {
         const res = response.data;
-        this.chartData.data.labels = _.map(res.data, c => mmnt(c.time).format('HH:mm:ss'));
+        this.chartData.data.labels = _.map(res.data, c => mmnt(c.time, 'YYYY.MM.DD HH:mm:ss').format('HH:mm:ss'));
         this.chartData.data.datasets[0].data = _.map(res.data, c => c.value);
 
         Vue.nextTick(() => {
