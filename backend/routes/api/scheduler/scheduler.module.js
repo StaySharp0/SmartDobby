@@ -4,6 +4,8 @@ const scheduler = require('node-schedule');
 const _ = require('lodash');
 const io = require('../io');
 
+const Sensor = require('../sensor/sensor.model');
+
 /**
  * Storable Representation of a Scheduled Event
  * 
@@ -63,10 +65,79 @@ let PersistentEvent = function (id, name, uid, when, what, args, pending) {
    */
 
   PersistentEvent.Actions = {
-    nomal: function (uid, name, args, cb) {
+    nomal: async function (uid, name, args, cb) {
       // defaults
       args = args || [];
-      io.of('/client').to(uid).emit('toastSchedule', { name, args });
+
+      let cond = [];
+      let perfm = {};
+      let valid = false;
+
+      _.map(args, o => {
+        if(o.type === 'sensor') {
+          cond.push({
+            sid: o.sid,
+          });
+        } else if(o.type === 'value') {
+          cond[cond.length-1].cond = o.cond;
+          cond[cond.length-1].value = o.value;
+        } else if(o.type === 'action') {
+          perfm.rid = o.rid;
+        }
+      });
+
+      for (let i in cond){
+        let o = cond[i];
+
+        let info = await Sensor.getInfo({ sid: o.sid });
+        if(!info.status) {
+          valid = false;
+          break;
+        }
+        else info = info.result;
+
+        let tbl = await Sensor.findLogTable(info);
+        if(!tbl.status) {
+          valid = false;
+          break;
+        }
+        else tbl = tbl.result;
+
+        const list = await Sensor.getCurrentValues(tbl, { id: o.sid });
+        const cur = list[0].value;
+
+        switch(o.cond){
+          case '>':
+            if(cur*1.0 > o.value*1.0) valid = true;
+          break;
+          case '>=':
+            if(cur*1.0 >= o.value*1.0) valid = true;
+          break;
+          case '=':
+            if(cur*1.0 == o.value*1.0) valid = true;
+          break;
+          case '<':
+            if(cur*1.0 < o.value*1.0) valid = true;
+          break;
+          case '<=':
+            if(cur*1.0 <= o.value*1.0) valid = true;
+          break;
+          default:
+            valid = false;
+        }
+
+        if(!valid) break;
+      }
+      
+
+      if(valid){
+        // 추가 필요
+        console.log(perfm);
+        io.of('/client').to(uid).emit('toastSchedule', { name });
+      } else {
+        return
+      }
+
     },
   };
 

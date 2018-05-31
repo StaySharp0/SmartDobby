@@ -42,12 +42,12 @@
         <li v-show="viewSensorCondition">
           <a @click="AddConditionValue('<=')">&lt;=</a>
         </li>
-        <li v-show="viewChain">
+        <!-- <li v-show="viewChain">
           <a @click="AddChain('AND')">AND</a>
         </li>
         <li v-show="viewChain">
           <a @click="AddChain('OR')">OR</a>
-        </li>
+        </li> -->
         <li v-show="viewAction">
           <a @click="AddActionList">Action</a>
         </li>
