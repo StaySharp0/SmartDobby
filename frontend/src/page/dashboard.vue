@@ -6,8 +6,8 @@
         <h3>{{g.name}}</h3>
         <div class="row" v-for="sensor in g.sensor" :key="sensor._id">
           <card-sensor :item="sensor"/>
-          <!-- <card-remocon />
-          <card-chart /> -->
+          <card-chart v-if="sensor.chart" :item="sensor"/>
+          <!-- <card-remocon /> -->
         </div>
       </div>
     </main>
