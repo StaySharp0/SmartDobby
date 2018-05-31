@@ -58,6 +58,12 @@ export default {
       this.selected.push(r);
     },
     Submit() {
+      this.$http.post('/api/remocon/add/macro', {
+        name: this.name,
+        macro: this.selected,
+      }).then((res) => {
+        window.location.href = '#/Remocon';
+      });
     },
   },
   created() {
