@@ -8,6 +8,7 @@ router.get('/list', controller.userList);
 router.get('/signal/list', controller.signalList);
 
 router.post('/add/legacy', controller.addLegacy);
+router.post('/add/macro', controller.addMacro);
 // router.post('/add/learn', controller.addLearn);
 // router.post('/update', controller.update);
 

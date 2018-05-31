@@ -8,10 +8,10 @@
           <label for="searchName" class="active">Remocon Name</label>
         </div>
       </div>
-      <ul class="collection"
-          v-show="resSearchNmae.length"
-          v-for="s in resSearchNmae" :key="s.idx">
-        <a class="collection-item" @click="selecteSiganl(s)">
+      <ul class="collection" v-show="resSearchNmae.length">
+        <a class="collection-item"
+          v-for="s in resSearchNmae" :key="s.idx"
+          @click="selecteSiganl(s)">
           {{s.name}}
           <span class="badge">{{s.model}}</span>
         </a>

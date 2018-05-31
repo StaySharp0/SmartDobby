@@ -4,7 +4,6 @@ const _ = require('lodash');
 const tbl = {
     user: 'URemocon',
     signal: 'RemoconSignal',
-    macoro: '',
 };
 
 exports.getList = function(ipt) {
@@ -29,8 +28,11 @@ exports.getList = function(ipt) {
 
 exports.getSignalList = function(ipt) {
     return knex(tbl.signal).select()
-        .where('name', 'like', `%${ipt.search}%`)
-        .orWhere('model', 'like', `%${ipt.search}%`)
+        .where((builder) => {
+            builder.where('name', 'like', `%${ipt.search}%`)
+                .orWhere('model', 'like', `%${ipt.search}%`)
+        })
+        .andWhere('model', '!=', 'macro')
         .then((result) => {
             return {
                 status: true,
@@ -57,3 +59,19 @@ exports.addUserRemocon = function(ipt) {
             };
     });
 }
+
+exports.addMacroRemocon = function(ipt) {
+    return knex(tbl.signal).insert(ipt)
+        .then((result) => {
+            return {
+                status: true,
+            };
+        }).catch((err) => {
+            return {
+                status: false,
+                code: err.code,
+            };
+    });
+}
+
+

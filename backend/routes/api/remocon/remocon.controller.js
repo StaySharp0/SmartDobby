@@ -72,3 +72,31 @@ exports.addLegacy = async (req, res) => {
     return res.status(400).json(ApiRes(false, 'URAL9000', '기존 리모컨으로 유저 리모컨 등록 성공'));
   }
 }
+
+/*
+    post /api/remocon/add/macro
+    {
+      token,
+      { name },
+      macro: [rid]
+    }
+*/
+
+exports.addMacro = async (req, res) => {
+  console.log('Api:remoconAddMacro');
+  console.log('body',req.body);
+
+  const ipt = {
+    name: req.body.name,
+    model: 'macro',
+    macro: req.body.macro,
+  };
+  
+  const create = await Remocon.addMacroRemocon(ipt);
+  
+  if(create.status){
+    return res.status(200).json(ApiRes(true, 'URAM0000', '매크로 리모컨 등록 성공'));
+  } else {
+    return res.status(400).json(ApiRes(false, 'URAM9000', '매크로 리모컨 등록 실패'));
+  }
+}

@@ -30,11 +30,11 @@
         </div>
         <ul id='addMacroRemocon' class='dropdown-content'>
           <li><a @click="modalOpen">Search</a></li>
-          <li><a @click="learnRemocon">Learn</a></li>
+          <!-- <li><a @click="learnRemocon">Learn</a></li> -->
           <!-- <li><a @click="Submit">Submit</a></li> -->
         </ul>
       </div>
-      <serch-modal :eBus="eBus"/>
+      <search-modal :eBus="eBus"/>
     </main>
   </div>
 </template>
@@ -51,7 +51,7 @@ export default {
   name: 'page-Remocon-Add',
   components: {
     'page-header': PageHeader,
-    'serch-modal': Modal,
+    'search-modal': Modal,
   },
   data() {
     return {
