@@ -16,14 +16,4 @@ knex-mysql.js
 socketTest.py
 TeamBack.pem
 package-lock.json
-index.html
-backend/public/static/css/app.f324f00d51039012032729a1aff9eb2a.css
-backend/public/static/css/app.f324f00d51039012032729a1aff9eb2a.css.map
-backend/public/static/img/office.f642206.jpeg
-backend/public/static/js/app.871c740d3ff85f572d19.js
-backend/public/static/js/app.871c740d3ff85f572d19.js.map
-backend/public/static/js/manifest.2ae2e69a05c33dfc65f8.js
-backend/public/static/js/manifest.2ae2e69a05c33dfc65f8.js.map
-backend/public/static/js/vendor.dc26d4025deb5a770825.js
-backend/public/static/js/vendor.dc26d4025deb5a770825.js.map
 gateway/__pycache__
