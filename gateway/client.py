@@ -2,6 +2,7 @@ from Sensor import Sensor
 from IRSerial import IRSerial
 from socketIO_client_nexus import SocketIO, BaseNamespace
 import os, sys, json 
+import time
 
 class MainClient:
 	def __init__(self, token):
@@ -123,7 +124,9 @@ class MainClient:
 
 
 if __name__ == "__main__":
-	main = MainClient("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOjQwLCJlbWFpbCI6InRlc3RAdGVzdC5jb20xIiwibmFtZSI6Iu2FjOyKpO2EsCIsImlhdCI6MTUyNzE1MjA5NywiZXhwIjoxNTI4MzYxNjk3LCJpc3MiOiJ0ZWFtYmFjay5jb20iLCJzdWIiOiJ1c2VySW5mbyJ9.NIztP5kP2ibojOXcGeYvTTwKxOTOQiXnLgbsyrUzGho")
-	# main = MainClient(sys.argv[1])
+	os.system('./run.sh')
+	time.sleep(1)
+	# main = MainClient("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOjQwLCJlbWFpbCI6InRlc3RAdGVzdC5jb20xIiwibmFtZSI6Iu2FjOyKpO2EsCIsImlhdCI6MTUyNzE1MjA5NywiZXhwIjoxNTI4MzYxNjk3LCJpc3MiOiJ0ZWFtYmFjay5jb20iLCJzdWIiOiJ1c2VySW5mbyJ9.NIztP5kP2ibojOXcGeYvTTwKxOTOQiXnLgbsyrUzGho")
+	main = MainClient(sys.argv[1])
 
 	main.Run()

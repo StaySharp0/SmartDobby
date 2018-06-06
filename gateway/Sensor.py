@@ -69,7 +69,7 @@ class Sensor(threading.Thread):
 			if pos != -1:
 				spos = buffer.find('{')
 				msg = buffer[spos:pos].replace('\0', '')
-				print(msg)
+				# print(msg)
 				msg = json.loads(msg)
 				buffer = buffer[pos+1:]
 			else:
@@ -103,8 +103,8 @@ class Sensor(threading.Thread):
 				}
 				ipt = tuple(self.baseList[baseID].values())
 
-				insert_command = "insert into sensor (id, type, gid, name, sid, interval) values (%s, %s, %s, %s, %s, %s) on duplicate key update id=values(id)"
-				self.cur.execute(insert_command, (baseID, sType, "0", baseID, "0", "30"))
+				insert_command = "insert into sensor (id, type, gid, name, sid, sensor.interval) values (%s, %s, %s, %s, %s, %s) on duplicate key update id=values(id)"
+				self.cur.execute(insert_command, (baseID, sType, "0", baseID, "0", "1"))
 				self.con.commit()
 				self.Socket._emit_createSensor(self.baseList[baseID])
 	

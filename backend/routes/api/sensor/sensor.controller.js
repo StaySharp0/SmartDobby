@@ -2,16 +2,49 @@ const mmnt = require('moment');
 const _ = require('lodash');
 const Sensor = require('./sensor.model.js');
 
-/*
-    POST /api/sensor/update
-    {
-      token,
-      seonsor id,
-      time,
-      value
-    }
-*/
 
+/**
+ * @api {post} /api/sensor/update Update
+ * @apiVersion 1.0.0
+ * @apiName Update Sensor value
+ * @apiGroup sensor
+ *
+ * @apiParam {String} token 사용자 token
+ * @apiParam {String} sid 센서 ID
+ * @apiParam {String} time 센서 측정된 시각
+ * @apiParam {String} vlaue 센서 값
+ *
+ * @apiSuccess {Boolean} status API 응답 성공 여부
+ * @apiSuccess {String} code API 응답 코드
+ * @apiSuccess {String} message API 요청에 대한 설명
+ * @apiSuccess {Object} data null
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "status": true,
+ *       "code": "US0000",
+ *       "message": "센서값 업데이트 성공",
+ *       "data": null,
+ *     }
+ * 
+ * @apiErrorExample Error-case1:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *       "status": false,
+ *       "code": "US9000",
+ *       "message": "센서값 업데이트 실패",
+ *       "data": null,
+ *     }
+ * @apiErrorExample Error-case2:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *       "status": false,
+ *       "code": "UR9000",
+ *       "message": "센서값 업데이트 실패(부정확한 아이디)",
+ *       "data": null,
+ *     }
+ */
 exports.update = async (req, res) => {
   console.log('Api:sensorUpdate');
   //console.log('body',req.body);
@@ -24,7 +57,7 @@ exports.update = async (req, res) => {
   };
   
   let info = await Sensor.getInfo(ipt);
-  if(!info.status) return res.status(400).json(ApiRes(false, 'UR9000', '센서값 업데이트 실패'));
+  if(!info.status) return res.status(400).json(ApiRes(false, 'UR9000', '센서값 업데이트 실패(부정확한 센서 아이디)'));
   else info = info.result;
 
   let tbl = await Sensor.findLogTable(info);
@@ -41,12 +74,48 @@ exports.update = async (req, res) => {
   }
 }
 
-/*
-    POST /api/sensor/list
-    {
-      token,
-    }
-*/
+/**
+ * @api {get} /api/sensor/list List
+ * @apiVersion 1.0.0
+ * @apiName Sensor List
+ * @apiGroup sensor
+ *
+ * @apiParam {String} token 사용자 token
+ *
+ * @apiSuccess {Boolean} status API 응답 성공 여부
+ * @apiSuccess {String} code API 응답 코드
+ * @apiSuccess {String} message API 요청에 대한 설명
+ * @apiSuccess {Object} data Sensor Array
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "status": true,
+ *       "code": "USL0000",
+ *       "message": "센서 정보리스트 조회 성공",
+ *       "data": [{
+ *          "sid": Integer,
+ *          "gid": Integer,
+ *          "name": "2:Temperature",
+ *          "type": "temperature",
+ *          "period": "30",
+ *          "dashboard": true,
+ *          "chart": false,
+ *          "link": true,
+ *          "value": "24",
+ *          "history": "2018.06.01 12:44:48"
+ *        }],
+ *     }
+ * 
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *       "status": false,
+ *       "code": "USL9000",
+ *       "message": "센서 정보리스트 조회 실패",
+ *       "data": null,
+ *     }
+ */
 exports.list = async (req, res) => {
   console.log('Api:sensorList');
   //console.log('body',req.body);
@@ -72,20 +141,49 @@ exports.list = async (req, res) => {
       return result;
     }));
     
-    return res.status(200).json(ApiRes(true, 'US0000', '센서 정보리스트 조회 성공', rtn));
+    return res.status(200).json(ApiRes(true, 'USL0000', '센서 정보리스트 조회 성공', rtn));
   } catch (e) {
     console.log(e)
-    return res.status(400).json(ApiRes(false, 'USU9000', '센서 정보리스트 조회 실패'));
+    return res.status(400).json(ApiRes(false, 'USL9000', '센서 정보리스트 조회 실패'));
   }
 }
 
-/*
-    POST /api/sensor/chart
-    {
-      token,
-      sid,
-    }
-*/
+/**
+ * @api {get} /api/sensor/chart Chart Data
+ * @apiVersion 1.0.0
+ * @apiName Sensor Chart Data
+ * @apiGroup sensor
+ *
+ * @apiParam {String} token 사용자 token
+ * @apiParam {String} sid 센서 ID
+ *
+ * @apiSuccess {Boolean} status API 응답 성공 여부
+ * @apiSuccess {String} code API 응답 코드
+ * @apiSuccess {String} message API 요청에 대한 설명
+ * @apiSuccess {Object} data Sensor value Array(length: 10)
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "status": true,
+ *       "code": "USC0000",
+ *       "message": "센서 차트값 조회 성공",
+ *       "data": [{
+ *          "sid": Integer,
+ *          "value": "24",
+ *          "time": "2018.06.01 12:44:48"
+ *        }, ... 10 ],
+ *     }
+ * 
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *       "status": false,
+ *       "code": "USC9000",
+ *       "message": "센서 차트값 조회 실패",
+ *       "data": null,
+ *     }
+ */
 exports.getChartData = async (req, res) => {
   console.log('Api:sensorChartData');
   //console.log('body',req.body);
